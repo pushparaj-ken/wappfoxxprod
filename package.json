@@ -1,0 +1,37 @@
+{
+  "name": "wappfoxnew",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "start": "npx prisma generate && node ./bin/www",
+    "dev": "nodemon ./bin/www",
+    "db": "npx prisma generate && npx prisma migrate dev"
+  },
+  "prisma": {
+    "schema": "./db/prisma-schema/prisma/schema.prisma"
+  },
+  "dependencies": {
+    "@prisma/client": "^5.15.1",
+    "bcryptjs": "^2.4.3",
+    "cookie-parser": "~1.4.4",
+    "cors": "^2.8.5",
+    "debug": "~2.6.9",
+    "dotenv": "^16.4.5",
+    "express": "~4.16.1",
+    "googleapis": "^137.1.0",
+    "http-errors": "~1.6.3",
+    "moment": "^2.30.1",
+    "morgan": "~1.9.1",
+    "node-localstorage": "^3.0.5",
+    "nodemailer": "^6.9.13",
+    "passport": "^0.7.0",
+    "passport-jwt": "^4.0.1",
+    "pug": "2.0.0-beta11",
+    "swagger-jsdoc": "^6.2.8",
+    "swagger-ui-express": "^5.0.0",
+    "tedious": "^18.1.0"
+  },
+  "devDependencies": {
+    "prisma": "^5.15.1"
+  }
+}

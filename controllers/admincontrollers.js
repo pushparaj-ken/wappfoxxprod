@@ -1,0 +1,217 @@
+const catchAsync = require('../utils/catchAsync');
+const Auth = require('../services/token');
+const _ = require('lodash');
+const emailError = require('../services/email')
+const prisma = require('../db/prisma-client/prisma.service');
+const bcrypt = require("bcryptjs");
+
+
+const LoginDetails = catchAsync(async (req, res, next) => {
+  try {
+    const values = req.body
+    if (values.EMailAdresse != '' && values.EMailAdresse != null && values.EMailAdresse != undefined && values.Passwort != '' && values.Passwort != null && values.Passwort != undefined) {
+      const AdministratorinDetails = await prisma.administratorin.findUnique({ where: { EMailAdresse: values.EMailAdresse } })
+      if (AdministratorinDetails != null) {
+        const id = AdministratorinDetails.Id;
+        const token = Auth.getJWTToken(id, "Admin")
+        console.log(token)
+        res.set('Authentication', token);
+        res.cookie('Authentication', token, { httpOnly: true, secure: true, maxAge: 3600000 });
+        console.log('Response Header Authentication:', res.get('Authentication'));
+        console.log('Response Header Authentication:', res.get('Set-Cookie'));
+        const isPasswordMatched = bcrypt.compare(values.Passwort, AdministratorinDetails.Passwort);
+        if (!isPasswordMatched) {
+          const errcode = new Error("Password mismatch");
+          errcode.statusCode = 201;
+          return next(errcode);
+        } else {
+          const sanitizedUserDetails = _.omit(AdministratorinDetails, ['Passwort']);
+          res.send({
+            success: true,
+            code: 200,
+            Data: sanitizedUserDetails,
+            status: "Login Successfully",
+            token: token
+          });
+          //console.log(res)
+        }
+      } else {
+        const errcode = new Error("Email or Password mismatch");
+        errcode.statusCode = 201;
+        return next(errcode);
+      }
+    } else {
+      const errcode = new Error("All Field are Monitory");
+      errcode.statusCode = 201;
+      return next(errcode);
+    }
+  } catch (error) {
+    console.log("TCL: getBankverbindungen -> error", error)
+    const errcode = new Error(error.stack);
+    errcode.statusCode = 201;
+    return next(errcode);
+  }
+});
+
+const RegisterDetails = catchAsync(async (req, res, next) => {
+  try {
+    const values = req.body
+    if (values.EMailAdresse && values.Vorname && values.Telefonnummer && values.EMailAdresse.trim() !== '' && values.Vorname.trim() !== '') {
+      const dministratorinDetails = await prisma.administratorin.findUnique({ where: { EMailAdresse: values.EMailAdresse } });
+      if (dministratorinDetails != null) {
+        const errcode = new Error("Email Already Exists");
+        errcode.statusCode = 201;
+        return next(errcode);
+      } else {
+        values.Passwort = await bcrypt.hash(values.Passwort, 10);
+        values.Telefonnummer = (values.Telefonnummer).toString();
+        const UsersDetails = await prisma.administratorin.create({ data: values });
+        if (UsersDetails) {
+          const id = UsersDetails.Id;
+          const token = Auth.getJWTToken(id, "Admin")
+          const sanitizedUserDetails = _.omit(UsersDetails, ['Passwort']);
+          res.set('Authentication', token);
+          res.cookie('Authentication', token, { httpOnly: true, secure: true, maxAge: 3600000 });
+          res.send({
+            success: true,
+            code: 200,
+            status: "Register Successfully",
+            timestamp: new Date(),
+            data: sanitizedUserDetails,
+            token: token
+          });
+        } else {
+          const errcode = new Error("No Records Found");
+          errcode.statusCode = 201;
+          return next(errcode);
+        }
+      }
+    } else {
+      const errcode = new Error("All Field are Monitory");
+      errcode.statusCode = 201;
+      return next(errcode);
+    }
+
+  } catch (error) {
+    console.log("TCL: getBankverbindungen -> error", error)
+    const errcode = new Error(error.message);
+    errcode.statusCode = 201;
+    return next(errcode);
+  }
+});
+
+const DashboardDetails = catchAsync(async (req, res, next) => {
+  try {
+    let values = req.query
+    const CustomersDetails = await prisma.kunden.findMany();
+    const DriverDetails = await prisma.Benutzer.findMany();
+    let Data = {
+      CustomerCount: CustomersDetails.length,
+      DriverCount: DriverDetails.length
+    }
+    if (Data) {
+      res.send({
+        success: true,
+        code: 200,
+        status: "Data Retrieved successfully",
+        timestamp: new Date(),
+        data: Data
+      });
+    } else {
+      const errcode = new Error("No Records Found");
+      errcode.statusCode = 201;
+      return next(errcode);
+    }
+  } catch (error) {
+    const errcode = new Error(error.stack);
+    errcode.statusCode = 201;
+    return next(errcode);
+  }
+});
+
+const SendEmail = catchAsync(async (req, res, next) => {
+  try {
+    const values = req.body
+    if (values.EMailAdresse && values.EMailAdresse.trim() !== '') {
+      const code = Math.floor(100000 + Math.random() * 900000);
+      let content = "Email Verification code " + code;
+      const EmailResponse = await emailError.sendEmail(values.EMailAdresse, "Email Verification Consense", content);
+      if (EmailResponse.code === 200) {
+        const data = {
+          EmailCode: code
+        }
+        const where = { EMailAdresse: values.EMailAdresse }
+        await prisma.Benutzer.update({ data, where });
+        res.send({
+          success: true,
+          code: 200,
+          status: "Email Send Successfully",
+          timestamp: new Date(),
+        });
+      } else {
+        const errcode = new Error(EmailResponse.status);
+        errcode.statusCode = 201;
+        return next(errcode);
+      }
+    } else {
+      const errcode = new Error("All Field are Monitory");
+      errcode.statusCode = 201;
+      return next(errcode);
+    }
+  } catch (error) {
+    console.log("TCL: getBankverbindungen -> error", error)
+    const errcode = new Error(error.stack);
+    errcode.statusCode = 201;
+    return next(errcode);
+  }
+});
+
+const VerifyEmail = catchAsync(async (req, res, next) => {
+  try {
+    const values = req.body
+    if (values.EMailAdresse != '' && values.EMailAdresse != null && values.EMailAdresse != undefined && values.code !== '' && values.code !== null && values.code !== undefined) {
+      const existingRecord = await prisma.Benutzer.findUnique({ where: { EMailAdresse: values.EMailAdresse } });
+      if (existingRecord) {
+        if (existingRecord.EmailCode === values.code) {
+          let Data = {
+            IsEmail: true
+          }
+          await existingRecord.update(Data);
+          res.send({
+            success: true,
+            code: 200,
+            status: "Verified Successfully",
+            timestamp: new Date(),
+          });
+        } else {
+          const errcode = new Error("Verfication Code is Invalid");
+          errcode.statusCode = 201;
+          return next(errcode);
+        }
+      } else {
+        const errcode = new Error("Driver not Found");
+        errcode.statusCode = 201;
+        return next(errcode);
+      }
+
+    } else {
+      const errcode = new Error("Id required to Update Password.");
+      errcode.statusCode = 201;
+      return next(errcode);
+    }
+
+  } catch (error) {
+    console.log("TCL: getBankverbindungen -> error", error)
+    const errcode = new Error(error.stack);
+    errcode.statusCode = 201;
+    return next(errcode);
+  }
+});
+
+module.exports = {
+  LoginDetails,
+  RegisterDetails,
+  DashboardDetails,
+  SendEmail,
+  VerifyEmail
+}

@@ -1,0 +1,2478 @@
+generator client {
+  provider = "prisma-client-js"
+  output   = "../../../node_modules/@prisma/wappfox/client/prisma-schema"
+}
+
+datasource db {
+  provider = "sqlserver"
+  url      = env("DATABASE_URL")
+}
+
+model EFMigrationsHistory {
+  MigrationId    String @id(map: "PK___EFMigrationsHistory") @db.NVarChar(150)
+  ProductVersion String @db.NVarChar(32)
+
+  @@map("__EFMigrationsHistory")
+}
+
+model Administratorin {
+  Id            Int     @id(map: "PK_Administratorin") @default(autoincrement())
+  Vorname       String? @db.NVarChar(Max)
+  Nachname      String? @db.NVarChar(Max)
+  Passwort      String? @db.NVarChar(Max)
+  EMailAdresse  String  @unique
+  Telefonnummer String? @db.NVarChar(Max)
+}
+
+model ActionItem {
+  ActionItemId      Int     @id(map: "PK_ActionItem") @default(autoincrement())
+  TenantId          Int
+  AnsprechpartnerId Int
+  FahrerId          Int
+  NodeName          String? @db.NVarChar(Max)
+  ActionName        String? @db.NVarChar(Max)
+  ActionSelected    Boolean
+  ActionCommand     String? @db.NVarChar(Max)
+  NodeId            String? @db.NVarChar(Max)
+  Excluded          Boolean
+  Email             String? @db.NVarChar(Max)
+}
+
+model Adresse {
+  AdresseId            Int                       @id(map: "PK_Adresse") @default(autoincrement())
+  Strasse              String?                   @db.NVarChar(Max)
+  Plz                  String?                   @db.NVarChar(Max)
+  Ort                  String?                   @db.NVarChar(Max)
+  Land                 String                    @db.NVarChar(Max)
+  IstAktiv             Boolean?
+  IstAktivGueltigAb    DateTime?
+  IstAktivGueltigBis   DateTime?
+  AdressTyp            String                    @db.NVarChar(Max)
+  Oertlichkeit         String?                   @db.NVarChar(Max)
+  Info                 String?                   @db.NVarChar(Max)
+  Location             Unsupported("geography")?
+  X                    Float?
+  Y                    Float?
+  Emailadresse         String?                   @db.NVarChar(255)
+  Telefonnummer        String?                   @db.NVarChar(Max)
+  Faxnummer            String?                   @db.NVarChar(Max)
+  Mobilnummer          String?                   @db.NVarChar(Max)
+  FahrerId             Int?
+  SchadenId            Int?
+  KundeTenantItemId    Int?
+  WerkstattId          Int?
+  DienstleisterId      Int?
+  InnuceId             String?                   @db.NVarChar(Max)
+  FahrzeugTenantItemId Int?
+  KontaktBeziehungId   Int?
+  KontaktBeziehungId1  Int?
+  AdressVerweis        Int
+  Automatik            Boolean?
+}
+
+model Ansprechpartner {
+  AnsprechpartnerId       Int      @id(map: "PK_Ansprechpartner") @default(autoincrement())
+  Vorname                 String?  @db.NVarChar(Max)
+  Nachname                String?  @db.NVarChar(Max)
+  AnsprechpartnerFunktion String   @db.NVarChar(Max)
+  Email                   String?  @db.NVarChar(Max)
+  Mobil                   String?  @db.NVarChar(Max)
+  Telefon                 String?  @db.NVarChar(Max)
+  DienstleisterId         Int?
+  KundeTenantItemId       Int?
+  Fax                     String?  @db.NVarChar(Max)
+  Automatik               Boolean?
+}
+
+model AppointmentData {
+  Id                   Int       @id(map: "PK_AppointmentData") @default(autoincrement())
+  Subject              String?   @db.NVarChar(Max)
+  Location             String?   @db.NVarChar(Max)
+  Description          String?   @db.NVarChar(Max)
+  StartTime            DateTime?
+  EndTime              DateTime?
+  IsAllDay             Boolean?
+  CategoryColor        String?   @db.NVarChar(Max)
+  RecurrenceRule       String?   @db.NVarChar(Max)
+  EventType            String?   @db.NVarChar(Max)
+  RecurrenceID         Int?
+  RecurrenceException  String?   @db.NVarChar(Max)
+  StartTimezone        String?   @db.NVarChar(Max)
+  EndTimezone          String?   @db.NVarChar(Max)
+  FahrzeugTenantItemId Int?
+  KundeTenantItemId    Int?
+  ActionKommando       String?   @db.NVarChar(Max)
+  Erinnerert           Int       @default(0, map: "DF__Appointme__Erinn__789EE131")
+  Prioritaet           String?   @db.NVarChar(Max)
+  Status               String?   @db.NVarChar(Max)
+  LeasingId            Int?
+  SchadenId            Int?
+  VersicherungId       Int?
+  Adressat             String?   @db.NVarChar(Max)
+  Erledigt             Boolean?
+  RuleId               Int?
+  WfStateId            Int?
+  PreviousStateData    String?   @db.NVarChar(Max)
+  Vorlage              String?   @db.NVarChar(Max)
+  Erinnerungsintervall String?   @db.NVarChar(Max)
+  UeberwachtDurch      String?   @db.NVarChar(Max)
+}
+
+model Arbeitsgruppen {
+  ArbeitsgruppeId   Int                 @id(map: "PK_Arbeitsgruppen") @default(autoincrement())
+  Bezeichnung       String?             @db.NVarChar(Max)
+  Bereich           String?             @db.NVarChar(Max)
+  Gruppenmitglieder Gruppenmitglieder[]
+}
+
+model Arbeitszeit {
+  ArbeitszeitId        Int               @id(map: "PK_Arbeitszeit") @default(autoincrement())
+  ZeiteinheitenFinal   Decimal           @db.Decimal(18, 2)
+  ZeiteinheitenAusKv   Decimal           @db.Decimal(18, 2)
+  PreisProEinheitFinal Decimal           @db.Decimal(18, 2)
+  Bezeichnung          String?           @db.NVarChar(Max)
+  KostenvoranschlagId  Int
+  UniqueKvId           String?           @db.NVarChar(Max)
+  GesamtpreisAusKv     Decimal           @default(0.0, map: "DF__Arbeitsze__Gesam__63F8CA06") @db.Decimal(18, 2)
+  GesamtpreisFinal     Decimal           @default(0.0, map: "DF__Arbeitsze__Gesam__64ECEE3F") @db.Decimal(18, 2)
+  PositionStatus       Int               @default(0, map: "DF__Arbeitsze__Posit__65E11278")
+  PreisProEinheitAusKv Decimal           @default(0.0, map: "DF__Arbeitsze__Preis__66D536B1") @db.Decimal(18, 2)
+  Bemerkung            String?           @db.NVarChar(Max)
+  APN                  String?           @db.NVarChar(Max)
+  Arbeitsart           String?           @db.NVarChar(Max)
+  DVN                  String?           @db.NVarChar(Max)
+  RC                   String?           @db.NVarChar(Max)
+  Stufe                String?           @db.NVarChar(Max)
+  Kostenvoranschlag    Kostenvoranschlag @relation(fields: [KostenvoranschlagId], references: [KostenvoranschlagId], onDelete: Cascade, onUpdate: NoAction, map: "FK_Arbeitszeit_Kostenvoranschlag_KostenvoranschlagId")
+}
+
+model Audit {
+  AuditId   Int      @id(map: "PK_Audit") @default(autoincrement())
+  DateTime  DateTime
+  Username  String?  @db.NVarChar(Max)
+  TableName String   @db.NVarChar(128)
+  Action    String   @db.NVarChar(50)
+  KeyValues String?  @db.NVarChar(Max)
+  OldValues String?  @db.NVarChar(Max)
+  NewValues String?  @db.NVarChar(Max)
+}
+
+model Aufgaben {
+  Id                Int       @id(map: "PK_Aufgaben") @default(autoincrement())
+  istAktiv          Boolean?
+  MFIdentifier      String?   @db.NVarChar(Max)
+  Faelligkeitsdatum DateTime?
+  SchadenId         Int?
+}
+
+model Bankverbindung {
+  Id Int @id(map: "PK_Bankverbindung") @default(autoincrement())
+}
+
+model Bankverbindungen {
+  BankverbindungId  Int     @id(map: "PK_Bankverbindungen") @default(autoincrement())
+  BankName          String? @db.NVarChar(Max)
+  Iban              String? @db.NVarChar(Max)
+  Bic               String? @db.NVarChar(Max)
+  Zahlungstyp       String? @db.NVarChar(Max)
+  DienstleisterId   Int?
+  KundeTenantItemId Int?
+  Zahlungsziel      Int
+  SteuerNr          String? @db.NVarChar(Max)
+}
+
+model Benutzer {
+  UserId             Int       @id(map: "PK_Benutzer") @default(autoincrement())
+  ObjectId           String?   @default(cuid()) @db.NVarChar(Max)
+  Kundenname         String?   @db.NVarChar(Max)
+  IstAktiv           Boolean?
+  IstAktivGueltigAb  DateTime?
+  IstAktivGueltigBis DateTime?
+  BenutzergruppeId   Int?
+  Benutzername       String?   @db.NVarChar(Max)
+  KundeTenantItemId  Int       @default(0, map: "DF__Benutzer__KundeT__5708E33C")
+  Benutzers          Benutzers?
+  Kunden             Kunden?   @relation(fields: [KundeTenantItemId], references: [TenantItemId], onDelete: NoAction, onUpdate: NoAction)
+  @@map("Benutzer")
+}
+
+model Benutzergruppen {
+  BenutzergruppeId Int     @id(map: "PK_Benutzergruppen") @default(autoincrement())
+  Rolle            String? @db.NVarChar(Max)
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
+model Benutzers {
+  BenutzerId             Int     @unique(map: "PK_Benutzers") @default(autoincrement())
+  VorundNachname         String? @db.NVarChar(Max)
+  Passwort               String? @db.NVarChar(Max)
+  StraBeundHausnummer    String? @db.NVarChar(Max)
+  PLZ                    Int?
+  Ort                    String? @db.NVarChar(Max)
+  zugehorigesUnternehmen String? @db.NVarChar(Max)
+  Kennzeichen            String? @db.NVarChar(Max)
+  EMailAdresse           String? @unique(map: "UQ__Benutzer__8507CAEF74A18878") @db.NVarChar(255)
+  Telefonnummer          String? @db.NVarChar(Max)
+  CountryCode            String? @db.NVarChar(Max)
+  IsEmail                Boolean?
+  EmailCode              Int     @default(0, map: "DF__Benutzers__Email__55209ACA")
+  UserId                 Int     @unique @default(0, map: "DF__Benutzers__UserI__5614BF03")
+  Benutzer               Benutzer?  @relation(fields: [UserId], references: [UserId], onDelete: NoAction, onUpdate: NoAction)
+}
+
+model Beschaedigung {
+  BeschaedigungId Int     @id(map: "PK_Beschaedigung") @default(autoincrement())
+  Beschreibung    String? @db.NVarChar(Max)
+}
+
+model Buchungsposition {
+  BuchungspositionId       Int       @id(map: "PK_Buchungsposition") @default(autoincrement())
+  BuchungsTyp              String    @db.NVarChar(Max)
+  SchadenabwicklungBereich String    @db.NVarChar(Max)
+  Belegnummer              String?   @db.NVarChar(Max)
+  Belegdatum               DateTime?
+  Buchungsdatum            DateTime?
+  Forderungsdatum          DateTime?
+  Buchungsbetrag           Decimal   @db.Decimal(18, 2)
+  Belegersteller           String?   @db.NVarChar(Max)
+  Notiz                    String?   @db.NVarChar(Max)
+  SchadenId                Int
+  Schaden                  Schaden   @relation(fields: [SchadenId], references: [Id], onDelete: Cascade, onUpdate: NoAction, map: "FK_Buchungsposition_Schaden_SchadenId")
+}
+
+model Bussgeld {
+  BussgeldId          Int       @id(map: "PK_Bussgeld") @default(autoincrement())
+  Aktenzeichen        String?   @db.NVarChar(Max)
+  Kennzeichen         String?   @db.NVarChar(Max)
+  Status              Boolean
+  Tatzeitpunkt        DateTime?
+  Eingangsdatum       DateTime?
+  Kommunikationsdatum DateTime?
+  ZustaendigeBehoerde String?   @db.NVarChar(Max)
+  EMailBehoerde       String?   @db.NVarChar(Max)
+  Zahlbescheid        Boolean
+  BussgeldHoehe       Decimal   @db.Decimal(18, 2)
+  KonkretesVergehen   String?   @db.NVarChar(Max)
+  Art                 String?   @db.NVarChar(Max)
+  Kommentar           String?   @db.NVarChar(Max)
+  FahrerId            Int
+  KundeTenantItemId   Int
+}
+
+model ClaimDocument {
+  ClaimDocumentExportId    Int      @id(map: "PK_ClaimDocument") @default(autoincrement())
+  CaseId                   String?  @db.NVarChar(Max)
+  AztIndex                 Int?
+  CreatedOn                String?  @db.NVarChar(Max)
+  ClaimNumber              String?  @db.NVarChar(Max)
+  DocumentType             Int
+  EventDate                String?  @db.NVarChar(Max)
+  SparePartsDeduction      Decimal? @db.Decimal(18, 2)
+  SparePartsDeductionValue Decimal? @db.Decimal(18, 2)
+  SummaryId                Int?
+  TimeUnitsPerHour         Int?
+  PaintingTimeUnitsPerHour Int?
+  PaintingSystem           Int
+  PostMasterId             Int?
+  VehicleId                Int?
+}
+
+model ClaimDocumentExportAdditional {
+  ClaimDocumentAdditionalId Int      @id(map: "PK_ClaimDocumentExportAdditional") @default(autoincrement())
+  Description               String?  @db.NVarChar(Max)
+  IsManuallyModified        Boolean
+  Price                     Decimal? @db.Decimal(18, 2)
+  IsDMS                     Boolean
+  Code                      String?  @db.NVarChar(Max)
+  Count                     Int?
+  NumberOfTimeUnits         Decimal? @db.Decimal(18, 2)
+  OemNumber                 String?  @db.NVarChar(Max)
+  ClaimDocumentExportId     Int?
+}
+
+model ClaimDocumentExportClaimDocumentLabor {
+  ClaimDocumentLaborId  Int      @id(map: "PK_ClaimDocumentExportClaimDocumentLabor") @default(autoincrement())
+  Description           String?  @db.NVarChar(Max)
+  IsManuallyModified    Boolean
+  Price                 Decimal? @db.Decimal(18, 2)
+  Code                  String?  @db.NVarChar(Max)
+  NumberOfTimeUnits     Decimal? @db.Decimal(18, 2)
+  RepCode               String?  @db.NVarChar(Max)
+  PositionNr            String?  @db.NVarChar(Max)
+  ClassCode             String?  @db.NVarChar(Max)
+  IsDMS                 Boolean
+  ClaimDocumentExportId Int?
+}
+
+model ClaimDocumentExportClaimDocumentPainting {
+  ClaimDocumentPaintingId Int      @id(map: "PK_ClaimDocumentExportClaimDocumentPainting") @default(autoincrement())
+  Description             String?  @db.NVarChar(Max)
+  IsManuallyModified      Boolean
+  Price                   Decimal? @db.Decimal(18, 2)
+  MaterialPoints          Decimal? @db.Decimal(18, 2)
+  Code                    String?  @db.NVarChar(Max)
+  NumberOfTimeUnits       Decimal? @db.Decimal(18, 2)
+  RepCode                 String?  @db.NVarChar(Max)
+  PositionNr              String?  @db.NVarChar(Max)
+  ClassCode               String?  @db.NVarChar(Max)
+  IsDMS                   Boolean
+  ClaimDocumentExportId   Int?
+}
+
+model ClaimDocumentExportClaimDocumentSparePart {
+  ClaimDocumentSparePartId Int      @id(map: "PK_ClaimDocumentExportClaimDocumentSparePart") @default(autoincrement())
+  Amount                   Decimal? @db.Decimal(18, 2)
+  UnitPrice                Decimal? @db.Decimal(18, 2)
+  Description              String?  @db.NVarChar(Max)
+  IsManuallyModified       Boolean
+  Price                    Decimal? @db.Decimal(18, 2)
+  Code                     String?  @db.NVarChar(Max)
+  Count                    Int?
+  OemNumber                String?  @db.NVarChar(Max)
+  IsDMS                    Boolean
+  ClaimDocumentExportId    Int?
+}
+
+model ClaimDocumentExportPaintingMaterial {
+  ClaimDocumentPaintingMaterialId Int      @id(map: "PK_ClaimDocumentExportPaintingMaterial") @default(autoincrement())
+  Description                     String?  @db.NVarChar(Max)
+  IsManuallyModified              Boolean
+  Price                           Decimal? @db.Decimal(18, 2)
+  ClaimDocumentExportId           Int?
+}
+
+model ClaimDocumentExportPostMaster {
+  PostMasterId   Int     @id(map: "PK_ClaimDocumentExportPostMaster") @default(autoincrement())
+  Comment        String? @db.NVarChar(Max)
+  RepairDuration Int
+}
+
+model ClaimDocumentExportSummary {
+  SummaryId                  Int      @id(map: "PK_ClaimDocumentExportSummary") @default(autoincrement())
+  AdditionalCost             Decimal? @db.Decimal(18, 2)
+  LaborCost                  Decimal? @db.Decimal(18, 2)
+  LaborCost1                 Decimal? @db.Decimal(18, 2)
+  LaborCost2                 Decimal? @db.Decimal(18, 2)
+  LaborCost3                 Decimal? @db.Decimal(18, 2)
+  LaborNumberOfTimeUnits     Decimal? @db.Decimal(18, 2)
+  LaborRate1                 Decimal? @db.Decimal(18, 2)
+  LaborRate2                 Decimal? @db.Decimal(18, 2)
+  LaborRate3                 Decimal? @db.Decimal(18, 2)
+  NetCost                    Decimal? @db.Decimal(18, 2)
+  PaintingCost               Decimal? @db.Decimal(18, 2)
+  PaintingLaborCost          Decimal? @db.Decimal(18, 2)
+  PaintingMaterialCost       Decimal? @db.Decimal(18, 2)
+  PaintingRate               Decimal? @db.Decimal(18, 2)
+  PaintingTimeUnits          Decimal? @db.Decimal(18, 2)
+  SmallSparePartsCost        Decimal? @db.Decimal(18, 2)
+  SmallSparePartsPercentage  Decimal? @db.Decimal(18, 2)
+  SparePartsCost             Decimal? @db.Decimal(18, 2)
+  TaxRate                    Decimal? @db.Decimal(18, 2)
+  TaxValue                   Decimal? @db.Decimal(18, 2)
+  TotalCost                  Decimal? @db.Decimal(18, 2)
+  UsedPartsTaxPositionsValue Decimal? @db.Decimal(18, 2)
+  UsedPartsTaxRate           Decimal? @db.Decimal(18, 2)
+  UsedPartsTaxValue          Decimal? @db.Decimal(18, 2)
+}
+
+model ClaimDocumentExportVehicle {
+  VehicleId             Int     @id(map: "PK_ClaimDocumentExportVehicle") @default(autoincrement())
+  Brand                 String? @db.NVarChar(Max)
+  EngineCapacity        String? @db.NVarChar(Max)
+  EnginePowerKW         String? @db.NVarChar(Max)
+  FirstRegistrationDate String? @db.NVarChar(Max)
+  Mileage               String? @db.NVarChar(Max)
+  Model                 String? @db.NVarChar(Max)
+  Paint                 Int
+  RegistrationNumber    String? @db.NVarChar(Max)
+  Submodel              String? @db.NVarChar(Max)
+  VIN                   String? @db.NVarChar(Max)
+}
+
+model ClaimDocumentLabor {
+  ClaimDocumentLaborId Int      @id(map: "PK_ClaimDocumentLabor") @default(autoincrement())
+  Description          String   @db.NVarChar(Max)
+  IsManuallyModified   Boolean
+  Price                Decimal? @db.Decimal(18, 2)
+  Code                 String   @db.NVarChar(Max)
+  NumberOfTimeUnits    Decimal? @db.Decimal(18, 2)
+  RepCode              String   @db.NVarChar(Max)
+  PositionNr           String   @db.NVarChar(Max)
+  ClassCode            String   @db.NVarChar(Max)
+  IsDMS                Boolean
+}
+
+model ClaimDocumentPainting {
+  ClaimDocumentPaintingId Int      @id(map: "PK_ClaimDocumentPainting") @default(autoincrement())
+  Description             String   @db.NVarChar(Max)
+  IsManuallyModified      Boolean
+  Price                   Decimal? @db.Decimal(18, 2)
+  MaterialPoints          Decimal? @db.Decimal(18, 2)
+  Code                    String   @db.NVarChar(Max)
+  NumberOfTimeUnits       Decimal? @db.Decimal(18, 2)
+  RepCode                 String   @db.NVarChar(Max)
+  PositionNr              String   @db.NVarChar(Max)
+  ClassCode               String   @db.NVarChar(Max)
+  IsDMS                   Boolean
+}
+
+model ClaimDocumentPaintingMaterial {
+  ClaimDocumentPaintingMaterialId Int      @id(map: "PK_ClaimDocumentPaintingMaterial") @default(autoincrement())
+  Description                     String   @db.NVarChar(Max)
+  IsManuallyModified              Boolean
+  Price                           Decimal? @db.Decimal(18, 2)
+}
+
+model ClaimDocumentSparePart {
+  ClaimDocumentSparePartId Int      @id(map: "PK_ClaimDocumentSparePart") @default(autoincrement())
+  Amount                   Decimal? @db.Decimal(18, 2)
+  UnitPrice                Decimal? @db.Decimal(18, 2)
+  Description              String   @db.NVarChar(Max)
+  IsManuallyModified       Boolean?
+  Price                    Decimal? @db.Decimal(18, 2)
+  Code                     String?  @db.NVarChar(Max)
+  Count                    Int?
+  OemNumber                String?  @db.NVarChar(Max)
+  IsDMS                    Boolean?
+}
+
+model DataFieldConfigs {
+  DataFieldConfigId        Int             @id(map: "PK_DataFieldConfigs") @default(autoincrement())
+  ImpactedDataFields       String?         @db.NVarChar(Max)
+  SourceEntity             String?         @db.NVarChar(Max)
+  Delimiter                String?         @db.NVarChar(Max)
+  FirstDataField           String?         @db.NVarChar(Max)
+  SecondDataField          String?         @db.NVarChar(Max)
+  ImportTemplateTemplateId Int             @default(0, map: "DF__DataField__Impor__6497E884")
+  Operation                String?         @db.NVarChar(Max)
+  FromWordNumber           Int?
+  TillWordNumber           Int?
+  ImportTemplates          ImportTemplates @relation(fields: [ImportTemplateTemplateId], references: [TemplateId], onDelete: Cascade, onUpdate: NoAction, map: "FK_DataFieldConfigs_ImportTemplates_ImportTemplateTemplateId")
+}
+
+model DbFieldMapping {
+  DbFieldMappingId   Int      @id(map: "PK_DbFieldMapping") @default(autoincrement())
+  DocumentField      String?  @db.NVarChar(Max)
+  DatabaseTableName  String?  @db.NVarChar(Max)
+  DatabaseColumnName String?  @db.NVarChar(Max)
+  DatabaseColumnType String?  @db.NVarChar(Max)
+  IsRequired         Boolean?
+  IsDatabaseColumnId Boolean?
+  DefaultValue       String?  @db.NVarChar(Max)
+  DbModelId          Int
+  IsForeignKey       Boolean?
+  IsPrimaryKey       Boolean?
+  Culturestring      String?  @db.NVarChar(Max)
+  Confidence         Float?   @db.Real
+  DbModels           DbModels @relation(fields: [DbModelId], references: [DbModelId], onDelete: Cascade, onUpdate: NoAction, map: "FK_DbFieldMapping_DbModels_DbModelId")
+}
+
+model DbModels {
+  DbModelId         Int              @id(map: "PK_DbModels") @default(autoincrement())
+  Name              String?          @db.NVarChar(Max)
+  DocumentId        String?          @db.NVarChar(Max)
+  ApiVersion        String?          @db.NVarChar(Max)
+  Guid              String?          @db.NVarChar(Max)
+  ModelType         String?          @db.NVarChar(Max)
+  ContainerName     String?          @db.NVarChar(Max)
+  Quality           Float?
+  IsActive          Boolean
+  ReferenceBlobName String?          @db.NVarChar(Max)
+  ZielAnwendung     String?          @db.NVarChar(Max)
+  ZielFormat        String?          @db.NVarChar(Max)
+  DbFieldMapping    DbFieldMapping[]
+}
+
+model DbTableConfig {
+  DbTableConfigId       Int     @id(map: "PK_DbTableConfig") @default(autoincrement())
+  TableName             String? @db.NVarChar(Max)
+  TableDescription      String? @db.NVarChar(Max)
+  DatastoreTableMapping String? @db.NVarChar(Max)
+  Active                Boolean
+  BlobName              String? @db.NVarChar(Max)
+  ModelId               Int
+  ModelName             String? @db.NVarChar(Max)
+  CultureString         String? @db.NVarChar(Max)
+  RunningTable          Boolean
+  DbModelId             Int
+}
+
+model DbTableMapping {
+  DbTableMappingId        Int      @id(map: "PK_DbTableMapping") @default(autoincrement())
+  DocumentTableColumnName String?  @db.NVarChar(Max)
+  DatabaseTableName       String?  @db.NVarChar(Max)
+  DatabaseTableColumnName String?  @db.NVarChar(Max)
+  DatabaseTableColumnType String?  @db.NVarChar(Max)
+  IsRequired              Boolean?
+  IsDatabaseColumnId      Boolean?
+  DefaultValue            String?  @db.NVarChar(Max)
+  DbTableConfigId         Int
+  IsForeignKey            Boolean?
+  IsPrimaryKey            Boolean?
+  Culture                 String?  @db.NVarChar(Max)
+  DocumentTableConfidence Float?
+}
+
+model Dienstleister {
+  DienstleisterId                                                       Int                         @id(map: "PK_Dienstleister") @default(autoincrement())
+  Schluessel                                                            String?                     @db.NVarChar(Max)
+  Name                                                                  String?                     @db.NVarChar(Max)
+  IstAktiv                                                              Boolean?
+  IstAktivGueltigAb                                                     DateTime?
+  IstAktivGueltigBis                                                    DateTime?
+  Dienstleisterart                                                      String?                     @db.NVarChar(Max)
+  Matchcode                                                             String?                     @db.NVarChar(Max)
+  Anmerkungen                                                           String?                     @db.NVarChar(Max)
+  NoxDepot                                                              Boolean                     @default(dbgenerated("CONVERT([bit],(0))"), map: "DF__Dienstlei__NoxDe__613C58EC")
+  Favorit                                                               Int?
+  Gewerbenachweis                                                       Boolean                     @default(dbgenerated("CONVERT([bit],(0))"), map: "DF__Dienstlei__Gewer__604834B3")
+  Teileservice                                                          Boolean                     @default(dbgenerated("CONVERT([bit],(0))"), map: "DF__Dienstlei__Teile__52793849")
+  AusserDienstBis                                                       DateTime?
+  AusserDienstVon                                                       DateTime?
+  InaktivGrund                                                          String?                     @db.NVarChar(Max)
+  Dlp                                                                   Decimal?                    @db.Decimal(18, 2)
+  Et                                                                    Decimal?                    @db.Decimal(18, 2)
+  RueckverguetungEt                                                     Decimal?                    @db.Decimal(18, 2)
+  AnzahlBuehnen                                                         Int                         @default(0, map: "DF__Dienstlei__Anzah__536D5C82")
+  Niederlassung                                                         String?                     @db.NVarChar(Max)
+  NseDepot                                                              Boolean                     @default(dbgenerated("CONVERT([bit],(0))"), map: "DF__Dienstlei__NseDe__546180BB")
+  SteuerNummer                                                          String?                     @db.NVarChar(Max)
+  UmsatzSteuerIdentNummer                                               String?                     @db.NVarChar(Max)
+  Verwendungsnachweis                                                   Boolean                     @default(dbgenerated("CONVERT([bit],(0))"), map: "DF__Dienstlei__Verwe__5555A4F4")
+  Dienstleistungspauschalen                                             Dienstleistungspauschalen[]
+  Fahrzeuge_Fahrzeuge_LieferantDienstleisterIdToDienstleister           Fahrzeuge[]                 @relation("Fahrzeuge_LieferantDienstleisterIdToDienstleister")
+  Fahrzeuge_Fahrzeuge_ReifenDienstleisterDienstleisterIdToDienstleister Fahrzeuge[]                 @relation("Fahrzeuge_ReifenDienstleisterDienstleisterIdToDienstleister")
+  Gruppenversicherung                                                   Gruppenversicherung[]
+}
+
+model DienstleisterTypen {
+  DienstleisterTypId Int     @id(map: "PK_DienstleisterTypen") @default(autoincrement())
+  Bezeichnung        String? @db.NVarChar(Max)
+}
+
+model Dienstleistungspauschalen {
+  DienstleistungspauschaleId Int           @id(map: "PK_Dienstleistungspauschalen") @default(autoincrement())
+  DienstleisterArt           String        @db.NVarChar(Max)
+  Dlp                        Decimal       @default(0, map: "DEFAULT_Dienstleistungspauschalen_Dlp") @db.Decimal(18, 2)
+  Et                         Decimal       @default(0, map: "DEFAULT_Dienstleistungspauschalen_Et") @db.Decimal(18, 2)
+  RueckverguetungEt          Decimal       @default(0, map: "DEFAULT_Dienstleistungspauschalen_RueckverguetungEt") @db.Decimal(18, 2)
+  KundeTenantItemId          Int?
+  DienstleisterId            Int           @default(0, map: "DF__Dienstlei__Diens__48EFCE0F")
+  Dienstleister              Dienstleister @relation(fields: [DienstleisterId], references: [DienstleisterId], onDelete: Cascade, onUpdate: NoAction, map: "FK_Dienstleistungspauschalen_Dienstleister_DienstleisterId")
+  Kunden                     Kunden?       @relation(fields: [KundeTenantItemId], references: [TenantItemId], onDelete: NoAction, onUpdate: NoAction, map: "FK_Dienstleistungspauschalen_Kunden_KundeTenantItemId")
+}
+
+model DriversCheckCheckups {
+  DriversCheckCheckupId Int                     @id(map: "PK_DriversCheckCheckups") @default(autoincrement())
+  DriversCheckFskId     Int                     @default(0, map: "DF__DriversCh__Drive__71F1E3A2")
+  DriversCheckFuId      Int                     @default(0, map: "DF__DriversCh__Drive__70FDBF69")
+  DriversCheckEmployees DriversCheckEmployees[]
+}
+
+model DriversCheckDriverLicenses {
+  DriversCheckDriverLicenseId Int                     @id(map: "PK_DriversCheckDriverLicenses") @default(autoincrement())
+  tagNumber                   String?                 @db.NVarChar(Max)
+  licenseNumber               String?                 @db.NVarChar(Max)
+  licenseValidUntil           String?                 @db.NVarChar(Max)
+  DrivingLicenseClasses       String?                 @db.NVarChar(Max)
+  Restrictions                String?                 @db.NVarChar(Max)
+  DriversCheckEmployees       DriversCheckEmployees[]
+}
+
+model DriversCheckEmployees {
+  DriversCheckEmployeeId      Int                         @id(map: "PK_DriversCheckEmployees") @default(autoincrement())
+  organisationId              String?                     @db.NVarChar(Max)
+  salutation                  String?                     @db.NVarChar(Max)
+  lastname                    String?                     @db.NVarChar(Max)
+  firstname                   String?                     @db.NVarChar(Max)
+  birthday                    String?                     @db.NVarChar(Max)
+  personnelNumber             String?                     @db.NVarChar(Max)
+  department                  String?                     @db.NVarChar(Max)
+  costCenter                  String?                     @db.NVarChar(Max)
+  licensePlate                String?                     @db.NVarChar(Max)
+  note                        String?                     @db.NVarChar(Max)
+  mobilePhone                 String?                     @db.NVarChar(Max)
+  email                       String?                     @db.NVarChar(Max)
+  superiorEmail               String?                     @db.NVarChar(Max)
+  checkupInterval             Int
+  FUCourseId                  Int
+  active                      Boolean
+  created                     DateTime
+  updated                     DateTime
+  DriversCheckDriverLicenseId Int?
+  DriversCheckPrivilegesId    Int?
+  DriversCheckModulesId       Int?
+  DriversCheckCheckupId       Int?
+  FahrerId                    Int                         @default(0, map: "DF__DriversCh__Fahre__5DEAEAF5")
+  DriversCheckCheckups        DriversCheckCheckups?       @relation(fields: [DriversCheckCheckupId], references: [DriversCheckCheckupId], onDelete: NoAction, onUpdate: NoAction, map: "FK_DriversCheckEmployees_DriversCheckCheckups_DriversCheckCheckupId")
+  DriversCheckDriverLicenses  DriversCheckDriverLicenses? @relation(fields: [DriversCheckDriverLicenseId], references: [DriversCheckDriverLicenseId], onDelete: NoAction, onUpdate: NoAction, map: "FK_DriversCheckEmployees_DriversCheckDriverLicenses_DriversCheckDriverLicenseId")
+  DriversCheckModules         DriversCheckModules?        @relation(fields: [DriversCheckModulesId], references: [DriversCheckModulesId], onDelete: NoAction, onUpdate: NoAction, map: "FK_DriversCheckEmployees_DriversCheckModules_DriversCheckModulesId")
+  DriversCheckPrivileges      DriversCheckPrivileges?     @relation(fields: [DriversCheckPrivilegesId], references: [DriversCheckPrivilegesId], onDelete: NoAction, onUpdate: NoAction, map: "FK_DriversCheckEmployees_DriversCheckPrivileges_DriversCheckPrivilegesId")
+  Fahrer                      Fahrer                      @relation(fields: [FahrerId], references: [FahrerId], onDelete: Cascade, onUpdate: NoAction, map: "FK_DriversCheckEmployees_Fahrer_FahrerId")
+}
+
+model DriversCheckFsks {
+  DriversCheckFskId Int     @id(map: "PK_DriversCheckFsks") @default(autoincrement())
+  checkupInterval   Int
+  lastCheckup       String? @db.NVarChar(Max)
+  nextCheckup       String? @db.NVarChar(Max)
+  validCheckup      Boolean
+}
+
+model DriversCheckFus {
+  DriversCheckFuId Int     @id(map: "PK_DriversCheckFus") @default(autoincrement())
+  checkupInterval  Int
+  lastCheckup      String? @db.NVarChar(Max)
+  nextCheckup      String? @db.NVarChar(Max)
+  validCheckup     Boolean
+}
+
+model DriversCheckModules {
+  DriversCheckModulesId Int                     @id(map: "PK_DriversCheckModules") @default(autoincrement())
+  FSK                   Boolean
+  VIA                   Boolean
+  FU                    Boolean
+  DriversCheckEmployees DriversCheckEmployees[]
+}
+
+model DriversCheckOrganizationCheckups {
+  DriversCheckOrganizationCheckupId Int                         @id(map: "PK_DriversCheckOrganizationCheckups") @default(autoincrement())
+  checkupInterval                   Int
+  checkupTimeslot                   Int
+  firstReminder                     Int
+  secondReminder                    Int
+  thirdReminder                     Int
+  DriversCheckOrganizations         DriversCheckOrganizations[]
+}
+
+model DriversCheckOrganizations {
+  DriversCheckOrganizationId        Int                               @id(map: "PK_DriversCheckOrganizations") @default(autoincrement())
+  uuid                              String?                           @db.NVarChar(Max)
+  parentId                          String?                           @db.NVarChar(Max)
+  name                              String?                           @db.NVarChar(Max)
+  supportEmail                      String?                           @db.NVarChar(Max)
+  addressContactPerson              String?                           @db.NVarChar(Max)
+  billRecipient                     String?                           @db.NVarChar(Max)
+  benefitRecipient                  String?                           @db.NVarChar(Max)
+  billByEmail                       Boolean
+  billEmail                         String?                           @db.NVarChar(Max)
+  billReportByEmail                 Boolean
+  billReportEmail                   String?                           @db.NVarChar(Max)
+  selfCheckupAccepted               Boolean
+  assignmentByChecker               Boolean
+  visualCheckByChecker              Boolean
+  created                           String?                           @db.NVarChar(Max)
+  updated                           String?                           @db.NVarChar(Max)
+  DriversCheckOrganizationCheckupId Int?
+  DriversCheckOrganizationCheckups  DriversCheckOrganizationCheckups? @relation(fields: [DriversCheckOrganizationCheckupId], references: [DriversCheckOrganizationCheckupId], onDelete: NoAction, onUpdate: NoAction, map: "FK_DriversCheckOrganizations_DriversCheckOrganizationCheckups_DriversCheckOrganizationCheckupId")
+}
+
+model DriversCheckPrivileges {
+  DriversCheckPrivilegesId Int                     @id(map: "PK_DriversCheckPrivileges") @default(autoincrement())
+  driver                   Boolean
+  checker                  Boolean
+  fleetManager             Boolean
+  admin                    Boolean
+  DriversCheckEmployees    DriversCheckEmployees[]
+}
+
+model EnterpriseContracts {
+  EnterpriseContractId         Int       @id(map: "PK_EnterpriseContracts") @default(autoincrement())
+  Schadennummer                String?   @db.NVarChar(Max)
+  BranchOfficeAddress          String?   @db.NVarChar(Max)
+  BranchOfficeTelephone        String?   @db.NVarChar(Max)
+  ContractConfirmationNumber   String?   @db.NVarChar(Max)
+  RenterFirstname              String?   @db.NVarChar(Max)
+  RenterLastname               String?   @db.NVarChar(Max)
+  RenterTelephone              String?   @db.NVarChar(Max)
+  ContractNumber               String?   @db.NVarChar(Max)
+  AuthNumberOfDays             Int       @default(0, map: "DF__Enterpris__AuthN__7E8CC4B1")
+  BranchId                     String?   @db.NVarChar(Max)
+  EffectiveNumberOfDays        Int       @default(0, map: "DF__Enterpris__Effec__7F80E8EA")
+  LastAuthDate                 DateTime?
+  PickupDate                   DateTime?
+  ReturnDate                   DateTime?
+  VehicleClass                 String?   @db.NVarChar(Max)
+  VehicleLicensePlate          String?   @db.NVarChar(Max)
+  ContractStatus               String?   @db.NVarChar(Max)
+  TransmissionDateTime         DateTime?
+  ReturnMethod                 String?   @db.NVarChar(Max)
+  RenterEmail                  String?   @db.NVarChar(Max)
+  VehicleMake                  String?   @db.NVarChar(Max)
+  VehicleModel                 String?   @db.NVarChar(Max)
+  PickupCity                   String?   @db.NVarChar(Max)
+  PickupCountry                String?   @db.NVarChar(Max)
+  PickupCountryCode            String?   @db.NVarChar(Max)
+  PickupPhone                  String?   @db.NVarChar(Max)
+  PickupPostalCode             String?   @db.NVarChar(Max)
+  PickupStreet                 String?   @db.NVarChar(Max)
+  PickupType                   String?   @db.NVarChar(Max)
+  ReturnCity                   String?   @db.NVarChar(Max)
+  ReturnCountry                String?   @db.NVarChar(Max)
+  ReturnCountryCode            String?   @db.NVarChar(Max)
+  ReturnPhone                  String?   @db.NVarChar(Max)
+  ReturnPostalCode             String?   @db.NVarChar(Max)
+  ReturnStreet                 String?   @db.NVarChar(Max)
+  ReturnType                   String?   @db.NVarChar(Max)
+  Mileage                      String?   @db.NVarChar(Max)
+  PickupEmail                  String?   @db.NVarChar(Max)
+  PickupName                   String?   @db.NVarChar(Max)
+  VehicleOutDate               String?   @db.NVarChar(Max)
+  VehicleYear                  String?   @db.NVarChar(Max)
+  Vin                          String?   @db.NVarChar(Max)
+  DataExchangeRecordId         Int       @default(0, map: "DF__Enterpris__DataE__119F9925")
+  TransactionId                String?   @db.NVarChar(Max)
+  AdditionalDays               Int?
+  BranchOfficeEmail            String?   @db.NVarChar(Max)
+  BranchOfficeLocation         String?   @db.NVarChar(Max)
+  BranchOfficeStateDescription String?   @db.NVarChar(Max)
+  BranchOfficeZipcode          String?   @db.NVarChar(Max)
+  ClaimDate                    DateTime?
+  Company                      String?   @db.NVarChar(Max)
+  ContractStatusDescription    String?   @db.NVarChar(Max)
+  OfficeId                     String?   @db.NVarChar(Max)
+  RenterLocation               String?   @db.NVarChar(Max)
+  RenterStreet                 String?   @db.NVarChar(Max)
+  RenterZipcode                String?   @db.NVarChar(Max)
+  ReturnName                   String?   @db.NVarChar(Max)
+}
+
+model EnumImportConfigs {
+  EnumImportConfigId       Int             @id(map: "PK_EnumImportConfigs") @default(autoincrement())
+  EnumType                 String?         @db.NVarChar(Max)
+  EnumValue                String?         @db.NVarChar(Max)
+  SourceValue              String?         @db.NVarChar(Max)
+  ImportTemplateTemplateId Int             @default(0, map: "DF__EnumImpor__Impor__1E05700A")
+  ImportTemplates          ImportTemplates @relation(fields: [ImportTemplateTemplateId], references: [TemplateId], onDelete: Cascade, onUpdate: NoAction, map: "FK_EnumImportConfigs_ImportTemplates_ImportTemplateTemplateId")
+}
+
+model Ersatzteil {
+  ErsatzteilId        Int               @id(map: "PK_Ersatzteil") @default(autoincrement())
+  Bezeichnung         String?           @db.NVarChar(Max)
+  PositionStatus      Int
+  GesamtpreisAusKv    Decimal           @db.Decimal(18, 2)
+  GesamtpreisFinal    Decimal           @db.Decimal(18, 2)
+  KostenvoranschlagId Int
+  UniqueKvId          String?           @db.NVarChar(Max)
+  AnzahlAusKv         Int               @default(0, map: "DF__Ersatztei__Anzah__60283922")
+  AnzahlFinal         Int               @default(0, map: "DF__Ersatztei__Anzah__611C5D5B")
+  EinzelpreisAusKv    Decimal           @default(0.0, map: "DF__Ersatztei__Einze__62108194") @db.Decimal(18, 2)
+  EinzelpreisFinal    Decimal           @default(0.0, map: "DF__Ersatztei__Einze__6304A5CD") @db.Decimal(18, 2)
+  OemNummer           String?           @db.NVarChar(Max)
+  Bemerkung           String?           @db.NVarChar(Max)
+  DVN                 String?           @db.NVarChar(Max)
+  ETN                 String?           @db.NVarChar(Max)
+  RC                  String?           @db.NVarChar(Max)
+  Eingangszeit        DateTime          @default(dbgenerated("0001-01-01T00:00:00.0000000"), map: "DF__Ersatztei__Einga__1A34DF26")
+  Kostenvoranschlag   Kostenvoranschlag @relation(fields: [KostenvoranschlagId], references: [KostenvoranschlagId], onDelete: Cascade, onUpdate: NoAction, map: "FK_Ersatzteil_Kostenvoranschlag_KostenvoranschlagId")
+}
+
+model Event {
+  EventId         Int     @id(map: "PK_Event") @default(autoincrement())
+  EventName       String? @db.NVarChar(Max)
+  EventActivation String? @db.NVarChar(Max)
+  EventOperation  String? @db.NVarChar(Max)
+}
+
+model Fahrer {
+  FahrerId                                    Int                     @id(map: "PK_Fahrer") @default(autoincrement())
+  Anrede                                      Int
+  Vorname                                     String?                 @db.NVarChar(Max)
+  Nachname                                    String                  @db.NVarChar(Max)
+  KompletterName                              String?                 @db.NVarChar(Max)
+  Zusatz                                      String?                 @db.NVarChar(Max)
+  Geburtsdatum                                DateTime?
+  Fahrerlaubnis                               String?                 @db.NVarChar(Max)
+  Fahrerklasse                                String?                 @db.NVarChar(Max)
+  Kostenstelle1                               String?                 @db.NVarChar(Max)
+  Kostenstelle2                               String?                 @db.NVarChar(Max)
+  Kostenstelle1G_ltigAb                       DateTime?               @map("Kostenstelle1GültigAb")
+  Kostenstelle2G_ltigAb                       DateTime?               @map("Kostenstelle2GültigAb")
+  NutzerVon                                   DateTime?
+  NutzerBis                                   DateTime?
+  DatumF_hrerschein                           DateTime?               @map("DatumFührerschein")
+  IstAktiv                                    Boolean?
+  IstAktivGueltigAb                           DateTime?
+  IstAktivGueltigBis                          DateTime?
+  EntfernungWohnungZuArbeitsplatz             Int?
+  EntfernungWohnungZuArbeitsplatzG_ltigAb     DateTime?               @map("EntfernungWohnungZuArbeitsplatzGültigAb")
+  Abteilung                                   String?                 @db.NVarChar(Max)
+  Position                                    String?                 @db.NVarChar(Max)
+  Vorgesetzter                                String?                 @db.NVarChar(Max)
+  Unternehmenszuschuss                        Float?
+  KontaktPersonalabteilung                    String?                 @db.NVarChar(Max)
+  AkademischerGrad                            String?                 @db.NVarChar(Max)
+  Personalnummer                              String?                 @db.NVarChar(Max)
+  LetzteUnfallverh_tungsvorschriftKontrolle   DateTime?               @map("LetzteUnfallverhütungsvorschriftKontrolle")
+  NaechsteUnfallverh_tungsvorschriftKontrolle DateTime?               @map("NaechsteUnfallverhütungsvorschriftKontrolle")
+  LetzteFahrerunterweisung                    DateTime?
+  NaechsteFahrerunterweisung                  DateTime?
+  LetzteFuehrerscheinKontrolle                DateTime?
+  NaechsteFuehrerscheinkontrolle              DateTime?
+  InNuceFahrerNummer                          Int?
+  KundeTenantItemId                           Int?
+  FahrzeugTenantItemId                        Int?
+  FahrerklasseName                            String?                 @db.NVarChar(Max)
+  ExternalDataField                           String?                 @db.VarChar(Max)
+  DriverCheckId                               String?                 @db.NVarChar(Max)
+  DriversCheckEmployees                       DriversCheckEmployees[]
+  Kunden                                      Kunden?                 @relation(fields: [KundeTenantItemId], references: [TenantItemId], onDelete: NoAction, onUpdate: NoAction, map: "FK_Fahrer_Kunden_KundeTenantItemId")
+  FahrerFahrzeug                              FahrerFahrzeug[]
+}
+
+model FahrerFahrzeug {
+  FahrerId              Int
+  FahrzeugeTenantItemId Int
+  PublicationDate       DateTime @default(now(), map: "DF__FahrerFah__Publi__09FE775D")
+  Fahrer                Fahrer   @relation(fields: [FahrerId], references: [FahrerId], onDelete: Cascade, onUpdate: NoAction, map: "FK_FahrerFahrzeug_Fahrer_FahrerId")
+
+  @@id([FahrerId, FahrzeugeTenantItemId], map: "PK_FahrerFahrzeug")
+}
+
+model Fahrerklasse {
+  FahrerklasseId        Int       @id(map: "PK_Fahrerklasse") @default(autoincrement())
+  TenantItemId          Int
+  FahrerklasseName      String?   @db.NVarChar(Max)
+  inNuceFahrerklasseId  String?   @db.NVarChar(Max)
+  FahrerklasseG_ltigAb  DateTime? @map("FahrerklasseGültigAb")
+  FahrerklasseG_ltigBis DateTime? @map("FahrerklasseGültigBis")
+  Status                Boolean?
+  FahrerId              Int
+}
+
+model Fahrzeugbelege {
+  FahrzeugbelegId               Int      @id(map: "PK_Fahrzeugbelege") @default(autoincrement())
+  Belegdatum                    DateTime
+  BelegerstellerDienstleisterId Int?
+  FahrzeugTenantItemId          Int      @default(0, map: "DF__Fahrzeugb__Fahrz__7D98A078")
+  Bezeichnung                   String?  @db.NVarChar(Max)
+  Belegnummer                   String?  @db.NVarChar(Max)
+  KmStand                       Float?
+  SteuerNeutral                 Boolean  @default(dbgenerated("CONVERT([bit],(0))"), map: "DF__Fahrzeugb__Steue__7E8CC4B1")
+}
+
+model FahrzeugbelegKategorien {
+  FahrzeugbelegKategorieId    Int                          @id(map: "PK_FahrzeugbelegKategorien") @default(autoincrement())
+  Bezeichnung                 String?                      @db.NVarChar(Max)
+  FahrzeugbelegKategorieTypId Int?
+  FahrzeugbelegKategorieTypen FahrzeugbelegKategorieTypen? @relation(fields: [FahrzeugbelegKategorieTypId], references: [FahrzeugbelegKategorieTypId], onDelete: NoAction, onUpdate: NoAction, map: "FK_FahrzeugbelegKategorien_FahrzeugbelegKategorieTypen_FahrzeugbelegKategorieTypId")
+}
+
+model FahrzeugbelegKategorieTypen {
+  FahrzeugbelegKategorieTypId Int                       @id(map: "PK_FahrzeugbelegKategorieTypen") @default(autoincrement())
+  Bezeichnung                 String?                   @db.NVarChar(Max)
+  SubTyp                      String?                   @db.NVarChar(Max)
+  FahrzeugbelegKategorien     FahrzeugbelegKategorien[]
+}
+
+model Fahrzeugbelegpositionen {
+  FahrzeugbelegpositionId             Int                                  @id(map: "PK_Fahrzeugbelegpositionen") @default(autoincrement())
+  Menge                               Int
+  Einzelpreis                         Decimal                              @db.Decimal(18, 2)
+  Gesamtpreis                         Decimal                              @db.Decimal(18, 2)
+  Hinweise                            String?                              @db.NVarChar(Max)
+  FahrzeugbelegId                     Int                                  @default(0, map: "DF__Fahrzeugb__Fahrz__731B1205")
+  FahrzeugbelegpositionsBezeichnungId Int?
+  FaelligkeitText                     String?                              @db.NVarChar(Max)
+  NaechsteFaelligkeit                 DateTime?
+  Zahlweise                           String?                              @db.NVarChar(Max)
+  FahrzeugbelegKategorieId            Int?
+  FahrzeugbelegKategorie              String?                              @db.NVarChar(Max)
+  FahrzeugbelegKategorieSubTyp        String?                              @db.NVarChar(Max)
+  FahrzeugbelegKategorieTyp           String?                              @db.NVarChar(Max)
+  FahrzeugbelegpositionsBezeichnungen FahrzeugbelegpositionsBezeichnungen? @relation(fields: [FahrzeugbelegpositionsBezeichnungId], references: [FahrzeugbelegpositionsBezeichnungId], onDelete: NoAction, onUpdate: NoAction, map: "FK_Fahrzeugbelegpositionen_FahrzeugbelegpositionsBezeichnungen_FahrzeugbelegpositionsBezeichnungId")
+}
+
+model FahrzeugbelegpositionsBezeichnungen {
+  FahrzeugbelegpositionsBezeichnungId Int                       @id(map: "PK_FahrzeugbelegpositionsBezeichnungen") @default(autoincrement())
+  Bezeichnung                         String?                   @db.NVarChar(Max)
+  Fahrzeugbelegpositionen             Fahrzeugbelegpositionen[]
+}
+
+model Fahrzeuge {
+  TenantItemId                                                              Int                          @id(map: "PK_Fahrzeuge") @default(autoincrement())
+  Kennzeichen                                                               String                       @db.NVarChar(Max)
+  KennzeichenGueltigAb                                                      DateTime?
+  Fin                                                                       String?                      @db.NVarChar(Max)
+  Name                                                                      String?                      @db.NVarChar(Max)
+  Erstzulassung                                                             DateTime?
+  Laufleistung                                                              Int?
+  Fahrzeugstatus                                                            String                       @db.NVarChar(Max)
+  FahrzeugstatusGueltigAb                                                   DateTime?
+  LetzteZulassung                                                           DateTime?
+  Kostenstelle1                                                             String?                      @db.NVarChar(Max)
+  Kostenstelle2                                                             String?                      @db.NVarChar(Max)
+  Kostenstelle1GueltigAb                                                    DateTime?
+  Kostenstelle2GueltigAb                                                    DateTime?
+  Beschreibung1                                                             String?                      @db.NVarChar(Max)
+  Beschreibung2                                                             String?                      @db.NVarChar(Max)
+  Autofarbe                                                                 String?                      @db.NVarChar(Max)
+  Polsterfarbe                                                              String?                      @db.NVarChar(Max)
+  InNuceFahrzeugNummer                                                      Int?
+  InNuceKndNr                                                               String?                      @db.NVarChar(Max)
+  LieferantDienstleisterId                                                  Int?
+  KaufvertragId                                                             Int?
+  MietvertragId                                                             Int?
+  LeasingvertragId                                                          Int?
+  KundeTenantItemId                                                         Int
+  Nettolistenpreis                                                          Float?
+  NettoSonderausstattungPreis                                               Float?
+  NachtraeglichesZubehoerPreis                                              Float?
+  Bruttolistenpreis                                                         Float?
+  Bruttolistenpreis_fuer_den_GwV                                            Float?
+  Gesamtpreis                                                               Float?
+  KfzSteuer                                                                 Float?
+  KfzSteuernummer                                                           String?                      @db.NVarChar(Max)
+  ExternalId                                                                String?                      @db.NVarChar(Max)
+  KennzeichenAnh_nger                                                       String?                      @map("KennzeichenAnhänger") @db.NVarChar(Max)
+  Anmerkungen                                                               String?                      @db.NVarChar(Max)
+  Dienstleisternummer                                                       String?                      @db.NVarChar(Max)
+  DienstleisterName                                                         String?                      @db.NVarChar(Max)
+  Erzeuger                                                                  String?                      @db.NVarChar(Max)
+  Eingang                                                                   DateTime?
+  Bestellung                                                                String?                      @db.NVarChar(Max)
+  BestellZeitinTagen                                                        String?                      @db.NVarChar(Max)
+  UnverbindlicherLiefertermin                                               DateTime?
+  Lieferung                                                                 DateTime?
+  LieferzeitInTagen                                                         String?                      @db.NVarChar(Max)
+  Rueckgabe                                                                 DateTime?
+  LetzterKilometerstand_Anzahl                                              Int?
+  LetzterKilometerstand_Tag                                                 DateTime?
+  ErsterKilometerstand_Anzahl                                               Int?
+  ErsterKilometerstand_Tag                                                  DateTime?
+  GefahreneKilometer                                                        Int?
+  Anlagennummer                                                             Int?
+  AFA                                                                       Int?
+  Buchwert                                                                  Int?
+  Leistung10erBereich                                                       String?                      @db.NVarChar(Max)
+  Leistung20erBereich                                                       String?                      @db.NVarChar(Max)
+  Hersteller                                                                String?                      @db.NVarChar(Max)
+  Modell                                                                    String?                      @db.NVarChar(Max)
+  Typ                                                                       String?                      @db.NVarChar(Max)
+  TypschluesselDatenlieferant                                               String?                      @db.NVarChar(Max)
+  TypschluesselInNuce                                                       String?                      @db.NVarChar(Max)
+  Fahrzeugart                                                               String?                      @db.NVarChar(Max)
+  PoolFahrzeug                                                              Boolean?
+  Produktionsbeginn                                                         DateTime?
+  Produktionsende                                                           DateTime?
+  HerstellerBestellCode                                                     String?                      @db.NVarChar(Max)
+  Tsn                                                                       String?                      @db.NVarChar(Max)
+  Hsn                                                                       String?                      @db.NVarChar(Max)
+  Karosserieform                                                            String?                      @db.NVarChar(Max)
+  AnzahlTueren                                                              Int?
+  AnzahlSitze                                                               Int?
+  AnzahlAchsen                                                              Int?
+  Nettogrundpreis                                                           Float?
+  Motortyp                                                                  String?                      @db.NVarChar(Max)
+  LeistungkW                                                                Int?
+  Leistung                                                                  Int?
+  Hubraum                                                                   Int?
+  DrehmomentMax                                                             Float?
+  Hoechstgeschwindigkeit                                                    Int?
+  Beschleunigung                                                            Float?
+  Antriebsart                                                               String?                      @db.NVarChar(Max)
+  AnzahlZylinder                                                            Int?
+  Zylinderanordnung                                                         String?                      @db.NVarChar(Max)
+  Verdichtungsverh_ltnis                                                    String?                      @map("Verdichtungsverhältnis") @db.NVarChar(Max)
+  Kolbenhub                                                                 Float?
+  Zylinderbohrung                                                           Float?
+  MotorartZusatz                                                            String?                      @db.NVarChar(Max)
+  Kraftstoffart                                                             String?                      @db.NVarChar(Max)
+  Sekundaerkraftstoff                                                       String?                      @db.NVarChar(Max)
+  Katalysatorart                                                            String?                      @db.NVarChar(Max)
+  StartStoppFunktion                                                        Boolean?
+  Tanktinhalt                                                               Float?
+  VerbrauchInnerorts                                                        Float?
+  VerbrauchAusserorts                                                       Float?
+  Verbrauchkombiniert                                                       Float?
+  CO2_Emission_g_km                                                         Int?
+  Effizienzklasse                                                           String?                      @db.NVarChar(Max)
+  Emissionsklasse                                                           String?                      @db.NVarChar(Max)
+  Partikelfilter                                                            String?                      @db.NVarChar(Max)
+  NOx                                                                       Float?
+  Oelart                                                                    String?                      @db.NVarChar(Max)
+  CO2_Emission_g_km_10erBereich                                             String?                      @db.NVarChar(Max)
+  CO2_Emission_g_km_20erBereich                                             String?                      @db.NVarChar(Max)
+  Verbrauch_Liter_auf_100                                                   Float?
+  Verbrauch25erbereich                                                      String?                      @db.NVarChar(Max)
+  Verbrauch5erbereich                                                       String?                      @db.NVarChar(Max)
+  ZulaessigeAnhaengerlastGebremst                                           Int?
+  ZulaessigeAnhaengerlastUngebremst                                         Int?
+  GewichtinKG                                                               Int?
+  GewichtinKG100erBereich                                                   String?                      @db.NVarChar(Max)
+  GewichtinKG250erBereich                                                   String?                      @db.NVarChar(Max)
+  GewichtinKG500erBereich                                                   String?                      @db.NVarChar(Max)
+  MaxGewichtinKG                                                            Int?
+  MaxGewichtinKG100erBereich                                                String?                      @db.NVarChar(Max)
+  MaxGewichtinKG250erBereich                                                String?                      @db.NVarChar(Max)
+  MaxGewichtinKG500erBereich                                                String?                      @db.NVarChar(Max)
+  MaxZuladungInKG                                                           Int?
+  MaxZuladung100erBereich                                                   String?                      @db.NVarChar(Max)
+  MaxZuladung250erBereich                                                   String?                      @db.NVarChar(Max)
+  MaxZuladung500erBereich                                                   String?                      @db.NVarChar(Max)
+  Laenge                                                                    Float?
+  Breite                                                                    Float?
+  Hoehe                                                                     Float?
+  Radstand                                                                  Float?
+  Spurweite                                                                 Float?
+  Bodenfreiheit                                                             Float?
+  Wendekreis                                                                Float?
+  AnzahlGaenge                                                              String?                      @db.NVarChar(Max)
+  Getriebeart                                                               String?                      @db.NVarChar(Max)
+  Hybridart                                                                 String?                      @db.NVarChar(Max)
+  Elektoantrieb                                                             String?                      @db.NVarChar(Max)
+  Batterietyp                                                               String?                      @db.NVarChar(Max)
+  ReichweiteBatterie                                                        Int?
+  AufladeZeitBatterie                                                       Float?
+  SchnellladezeitBatterie                                                   Float?
+  LebenserwartungBatterie                                                   Int?
+  BetriebstemperaturBatterie                                                Float?
+  Batteriespannung                                                          Float?
+  Batteriestrom                                                             Float?
+  Reifendimension_Vorne                                                     String?                      @db.NVarChar(Max)
+  Reifendimension_Hinten                                                    String?                      @db.NVarChar(Max)
+  Felgendimension_Vorne                                                     String?                      @db.NVarChar(Max)
+  Felgendimension_Hinten                                                    String?                      @db.NVarChar(Max)
+  Lagerort                                                                  String?                      @db.NVarChar(Max)
+  AktuelleBereifung                                                         String?                      @db.NVarChar(Max)
+  ProfiltiefeWrVr                                                           Decimal?                     @db.Decimal(18, 2)
+  ProfiltiefeWrVl                                                           Decimal?                     @db.Decimal(18, 2)
+  ProfiltiefeWrHr                                                           Decimal?                     @db.Decimal(18, 2)
+  ProfiltiefeWrHl                                                           Decimal?                     @db.Decimal(18, 2)
+  ProfiltiefeSrVr                                                           Decimal?                     @db.Decimal(18, 2)
+  ProfiltiefeSrVl                                                           Decimal?                     @db.Decimal(18, 2)
+  ProfiltiefeSrHr                                                           Decimal?                     @db.Decimal(18, 2)
+  ProfiltiefeSrHl                                                           Decimal?                     @db.Decimal(18, 2)
+  ReifengroesseSommer                                                       String?                      @db.NVarChar(Max)
+  ReifengroesseWinter                                                       String?                      @db.NVarChar(Max)
+  NaechsteHauptAbgasUntersuchung                                            DateTime?
+  IstAktiv                                                                  Boolean?
+  IstAktivGueltigAb                                                         DateTime?
+  IstAktivGueltigBis                                                        DateTime?
+  FahrzeugtypId                                                             Int?
+  LetzteUnfallverh_tungsvorschriftKontrolle                                 DateTime?                    @map("LetzteUnfallverhütungsvorschriftKontrolle")
+  NaechsteUnfallverh_tungsvorschriftKontrolle                               DateTime?                    @map("NaechsteUnfallverhütungsvorschriftKontrolle")
+  ReifenDienstleisterDienstleisterId                                        Int?
+  GruppenversicherungId                                                     Int?
+  GruppenversicherungsvertragId                                             Int?
+  ExternalDataField                                                         String?                      @db.VarChar(Max)
+  LandZulassung                                                             String                       @default("N'", map: "DF__Fahrzeuge__LandZ__116A8EFB") @db.NVarChar(Max)
+  PoolId                                                                    Int?
+  ServiceIntervallJahre                                                     Int?
+  ServiceLetzter                                                            DateTime?
+  ServiceNaechster                                                          DateTime?
+  PeriodEnd                                                                 DateTime                     @default(dbgenerated("9999-12-31T23:59:59.9999999"), map: "DF__Fahrzeuge__Perio__25DB9BFC")
+  PeriodStart                                                               DateTime                     @default(dbgenerated("0001-01-01T00:00:00.0000000"), map: "DF__Fahrzeuge__Perio__26CFC035")
+  Dienstleister_Fahrzeuge_LieferantDienstleisterIdToDienstleister           Dienstleister?               @relation("Fahrzeuge_LieferantDienstleisterIdToDienstleister", fields: [LieferantDienstleisterId], references: [DienstleisterId], onDelete: NoAction, onUpdate: NoAction, map: "FK_Fahrzeuge_Dienstleister_LieferantDienstleisterId")
+  Dienstleister_Fahrzeuge_ReifenDienstleisterDienstleisterIdToDienstleister Dienstleister?               @relation("Fahrzeuge_ReifenDienstleisterDienstleisterIdToDienstleister", fields: [ReifenDienstleisterDienstleisterId], references: [DienstleisterId], onDelete: NoAction, onUpdate: NoAction, map: "FK_Fahrzeuge_Dienstleister_ReifenDienstleisterDienstleisterId")
+  Fahrzeugtyp                                                               Fahrzeugtyp?                 @relation(fields: [FahrzeugtypId], references: [Id], onDelete: NoAction, onUpdate: NoAction, map: "FK_Fahrzeuge_Fahrzeugtyp_FahrzeugtypId")
+  Gruppenversicherung                                                       Gruppenversicherung?         @relation(fields: [GruppenversicherungId], references: [GruppenversicherungId], onDelete: NoAction, onUpdate: NoAction, map: "FK_Fahrzeuge_Gruppenversicherung_GruppenversicherungId")
+  Gruppenversicherungsvertrag                                               Gruppenversicherungsvertrag? @relation(fields: [GruppenversicherungsvertragId], references: [GruppenversicherungsvertragId], onDelete: NoAction, onUpdate: NoAction, map: "FK_Fahrzeuge_Gruppenversicherungsvertrag_GruppenversicherungsvertragId")
+  Kaufvertrags                                                              Kaufvertrags?                @relation(fields: [KaufvertragId], references: [KaufvertragId], onDelete: NoAction, onUpdate: NoAction, map: "FK_Fahrzeuge_Kaufvertrags_KaufvertragId")
+  Kunden                                                                    Kunden                       @relation(fields: [KundeTenantItemId], references: [TenantItemId], onDelete: Cascade, onUpdate: NoAction, map: "FK_Fahrzeuge_Kunden_KundeTenantItemId")
+  Mietvertrag                                                               Mietvertrag?                 @relation(fields: [MietvertragId], references: [MietvertragId], onDelete: NoAction, onUpdate: NoAction, map: "FK_Fahrzeuge_Mietvertrag_MietvertragId")
+  Leasingrechnung                                                           Leasingrechnung[]
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
+model FahrzeugeHistory {
+  TenantItemId                                Int
+  Kennzeichen                                 String    @db.NVarChar(Max)
+  KennzeichenGueltigAb                        DateTime?
+  Fin                                         String?   @db.NVarChar(Max)
+  Name                                        String?   @db.NVarChar(Max)
+  Erstzulassung                               DateTime?
+  Laufleistung                                Int?
+  Fahrzeugstatus                              String    @db.NVarChar(Max)
+  FahrzeugstatusGueltigAb                     DateTime?
+  LetzteZulassung                             DateTime?
+  Kostenstelle1                               String?   @db.NVarChar(Max)
+  Kostenstelle2                               String?   @db.NVarChar(Max)
+  Kostenstelle1GueltigAb                      DateTime?
+  Kostenstelle2GueltigAb                      DateTime?
+  Beschreibung1                               String?   @db.NVarChar(Max)
+  Beschreibung2                               String?   @db.NVarChar(Max)
+  Autofarbe                                   String?   @db.NVarChar(Max)
+  Polsterfarbe                                String?   @db.NVarChar(Max)
+  InNuceFahrzeugNummer                        Int?
+  InNuceKndNr                                 String?   @db.NVarChar(Max)
+  LieferantDienstleisterId                    Int?
+  KaufvertragId                               Int?
+  MietvertragId                               Int?
+  LeasingvertragId                            Int?
+  KundeTenantItemId                           Int
+  Nettolistenpreis                            Float?
+  NettoSonderausstattungPreis                 Float?
+  NachtraeglichesZubehoerPreis                Float?
+  Bruttolistenpreis                           Float?
+  Bruttolistenpreis_fuer_den_GwV              Float?
+  Gesamtpreis                                 Float?
+  KfzSteuer                                   Float?
+  KfzSteuernummer                             String?   @db.NVarChar(Max)
+  ExternalId                                  String?   @db.NVarChar(Max)
+  KennzeichenAnh_nger                         String?   @map("KennzeichenAnhänger") @db.NVarChar(Max)
+  Anmerkungen                                 String?   @db.NVarChar(Max)
+  Dienstleisternummer                         String?   @db.NVarChar(Max)
+  DienstleisterName                           String?   @db.NVarChar(Max)
+  Erzeuger                                    String?   @db.NVarChar(Max)
+  Eingang                                     DateTime?
+  Bestellung                                  String?   @db.NVarChar(Max)
+  BestellZeitinTagen                          String?   @db.NVarChar(Max)
+  UnverbindlicherLiefertermin                 DateTime?
+  Lieferung                                   DateTime?
+  LieferzeitInTagen                           String?   @db.NVarChar(Max)
+  Rueckgabe                                   DateTime?
+  LetzterKilometerstand_Anzahl                Int?
+  LetzterKilometerstand_Tag                   DateTime?
+  ErsterKilometerstand_Anzahl                 Int?
+  ErsterKilometerstand_Tag                    DateTime?
+  GefahreneKilometer                          Int?
+  Anlagennummer                               Int?
+  AFA                                         Int?
+  Buchwert                                    Int?
+  Leistung10erBereich                         String?   @db.NVarChar(Max)
+  Leistung20erBereich                         String?   @db.NVarChar(Max)
+  Hersteller                                  String?   @db.NVarChar(Max)
+  Modell                                      String?   @db.NVarChar(Max)
+  Typ                                         String?   @db.NVarChar(Max)
+  TypschluesselDatenlieferant                 String?   @db.NVarChar(Max)
+  TypschluesselInNuce                         String?   @db.NVarChar(Max)
+  Fahrzeugart                                 String?   @db.NVarChar(Max)
+  PoolFahrzeug                                Boolean?
+  Produktionsbeginn                           DateTime?
+  Produktionsende                             DateTime?
+  HerstellerBestellCode                       String?   @db.NVarChar(Max)
+  Tsn                                         String?   @db.NVarChar(Max)
+  Hsn                                         String?   @db.NVarChar(Max)
+  Karosserieform                              String?   @db.NVarChar(Max)
+  AnzahlTueren                                Int?
+  AnzahlSitze                                 Int?
+  AnzahlAchsen                                Int?
+  Nettogrundpreis                             Float?
+  Motortyp                                    String?   @db.NVarChar(Max)
+  LeistungkW                                  Int?
+  Leistung                                    Int?
+  Hubraum                                     Int?
+  DrehmomentMax                               Float?
+  Hoechstgeschwindigkeit                      Int?
+  Beschleunigung                              Float?
+  Antriebsart                                 String?   @db.NVarChar(Max)
+  AnzahlZylinder                              Int?
+  Zylinderanordnung                           String?   @db.NVarChar(Max)
+  Verdichtungsverh_ltnis                      String?   @map("Verdichtungsverhältnis") @db.NVarChar(Max)
+  Kolbenhub                                   Float?
+  Zylinderbohrung                             Float?
+  MotorartZusatz                              String?   @db.NVarChar(Max)
+  Kraftstoffart                               String?   @db.NVarChar(Max)
+  Sekundaerkraftstoff                         String?   @db.NVarChar(Max)
+  Katalysatorart                              String?   @db.NVarChar(Max)
+  StartStoppFunktion                          Boolean?
+  Tanktinhalt                                 Float?
+  VerbrauchInnerorts                          Float?
+  VerbrauchAusserorts                         Float?
+  Verbrauchkombiniert                         Float?
+  CO2_Emission_g_km                           Int?
+  Effizienzklasse                             String?   @db.NVarChar(Max)
+  Emissionsklasse                             String?   @db.NVarChar(Max)
+  Partikelfilter                              String?   @db.NVarChar(Max)
+  NOx                                         Float?
+  Oelart                                      String?   @db.NVarChar(Max)
+  CO2_Emission_g_km_10erBereich               String?   @db.NVarChar(Max)
+  CO2_Emission_g_km_20erBereich               String?   @db.NVarChar(Max)
+  Verbrauch_Liter_auf_100                     Float?
+  Verbrauch25erbereich                        String?   @db.NVarChar(Max)
+  Verbrauch5erbereich                         String?   @db.NVarChar(Max)
+  ZulaessigeAnhaengerlastGebremst             Int?
+  ZulaessigeAnhaengerlastUngebremst           Int?
+  GewichtinKG                                 Int?
+  GewichtinKG100erBereich                     String?   @db.NVarChar(Max)
+  GewichtinKG250erBereich                     String?   @db.NVarChar(Max)
+  GewichtinKG500erBereich                     String?   @db.NVarChar(Max)
+  MaxGewichtinKG                              Int?
+  MaxGewichtinKG100erBereich                  String?   @db.NVarChar(Max)
+  MaxGewichtinKG250erBereich                  String?   @db.NVarChar(Max)
+  MaxGewichtinKG500erBereich                  String?   @db.NVarChar(Max)
+  MaxZuladungInKG                             Int?
+  MaxZuladung100erBereich                     String?   @db.NVarChar(Max)
+  MaxZuladung250erBereich                     String?   @db.NVarChar(Max)
+  MaxZuladung500erBereich                     String?   @db.NVarChar(Max)
+  Laenge                                      Float?
+  Breite                                      Float?
+  Hoehe                                       Float?
+  Radstand                                    Float?
+  Spurweite                                   Float?
+  Bodenfreiheit                               Float?
+  Wendekreis                                  Float?
+  AnzahlGaenge                                String?   @db.NVarChar(Max)
+  Getriebeart                                 String?   @db.NVarChar(Max)
+  Hybridart                                   String?   @db.NVarChar(Max)
+  Elektoantrieb                               String?   @db.NVarChar(Max)
+  Batterietyp                                 String?   @db.NVarChar(Max)
+  ReichweiteBatterie                          Int?
+  AufladeZeitBatterie                         Float?
+  SchnellladezeitBatterie                     Float?
+  LebenserwartungBatterie                     Int?
+  BetriebstemperaturBatterie                  Float?
+  Batteriespannung                            Float?
+  Batteriestrom                               Float?
+  Reifendimension_Vorne                       String?   @db.NVarChar(Max)
+  Reifendimension_Hinten                      String?   @db.NVarChar(Max)
+  Felgendimension_Vorne                       String?   @db.NVarChar(Max)
+  Felgendimension_Hinten                      String?   @db.NVarChar(Max)
+  Lagerort                                    String?   @db.NVarChar(Max)
+  AktuelleBereifung                           String?   @db.NVarChar(Max)
+  ProfiltiefeWrVr                             Decimal?  @db.Decimal(18, 2)
+  ProfiltiefeWrVl                             Decimal?  @db.Decimal(18, 2)
+  ProfiltiefeWrHr                             Decimal?  @db.Decimal(18, 2)
+  ProfiltiefeWrHl                             Decimal?  @db.Decimal(18, 2)
+  ProfiltiefeSrVr                             Decimal?  @db.Decimal(18, 2)
+  ProfiltiefeSrVl                             Decimal?  @db.Decimal(18, 2)
+  ProfiltiefeSrHr                             Decimal?  @db.Decimal(18, 2)
+  ProfiltiefeSrHl                             Decimal?  @db.Decimal(18, 2)
+  ReifengroesseSommer                         String?   @db.NVarChar(Max)
+  ReifengroesseWinter                         String?   @db.NVarChar(Max)
+  NaechsteHauptAbgasUntersuchung              DateTime?
+  IstAktiv                                    Boolean?
+  IstAktivGueltigAb                           DateTime?
+  IstAktivGueltigBis                          DateTime?
+  FahrzeugtypId                               Int?
+  LetzteUnfallverh_tungsvorschriftKontrolle   DateTime? @map("LetzteUnfallverhütungsvorschriftKontrolle")
+  NaechsteUnfallverh_tungsvorschriftKontrolle DateTime? @map("NaechsteUnfallverhütungsvorschriftKontrolle")
+  ReifenDienstleisterDienstleisterId          Int?
+  GruppenversicherungId                       Int?
+  GruppenversicherungsvertragId               Int?
+  ExternalDataField                           String?   @db.VarChar(Max)
+  LandZulassung                               String    @db.NVarChar(Max)
+  PoolId                                      Int?
+  ServiceIntervallJahre                       Int?
+  ServiceLetzter                              DateTime?
+  ServiceNaechster                            DateTime?
+  PeriodEnd                                   DateTime
+  PeriodStart                                 DateTime
+
+  @@ignore
+}
+
+model FahrzeugKategorien {
+  FahrzeugKategorieId Int     @id(map: "PK_FahrzeugKategorien") @default(autoincrement())
+  Name                String? @db.NVarChar(Max)
+}
+
+model Fahrzeugtyp {
+  Id                Int         @id(map: "PK_Fahrzeugtyp") @default(autoincrement())
+  Hersteller        String?     @db.NVarChar(Max)
+  Modell            String?     @db.NVarChar(Max)
+  Typbezeichnung    String?     @db.NVarChar(Max)
+  Typschl_ssel      String?     @map("Typschlüssel") @db.NVarChar(Max)
+  Fahrzeugart       String?     @db.NVarChar(Max)
+  Produktionsbeginn String?     @db.NVarChar(Max)
+  Produktionsende   String?     @db.NVarChar(Max)
+  HSN               String?     @db.NVarChar(Max)
+  TSN               String?     @db.NVarChar(Max)
+  Sitze             Int         @db.SmallInt
+  Tueren            Int         @db.SmallInt
+  Achsen            Int         @db.SmallInt
+  Nettopreis        Float
+  Leistung          Int         @db.SmallInt
+  Hubraum           Int
+  Fahrzeuge         Fahrzeuge[]
+}
+
+model Gruppenmitglieder {
+  GruppenmitgliedId Int            @id(map: "PK_Gruppenmitglieder") @default(autoincrement())
+  SystemName        String?        @db.NVarChar(Max)
+  ArbeitsgruppeId   Int            @default(0, map: "DF__Gruppenmi__Arbei__689D8392")
+  MfilesName        String?        @db.NVarChar(Max)
+  Arbeitsgruppen    Arbeitsgruppen @relation(fields: [ArbeitsgruppeId], references: [ArbeitsgruppeId], onDelete: Cascade, onUpdate: NoAction, map: "FK_Gruppenmitglieder_Arbeitsgruppen_ArbeitsgruppeId")
+}
+
+model Gruppenversicherung {
+  GruppenversicherungId                     Int           @id(map: "PK_Gruppenversicherung") @default(autoincrement())
+  Gruppenvertragsnummer                     String?       @db.NVarChar(Max)
+  Versicherungsbeginn                       DateTime?
+  Versicherungsende                         DateTime?
+  Kommentar                                 String?       @db.NVarChar(Max)
+  VsVK                                      Float         @default(0.0000000000000000, map: "DF__Gruppenver__VsVK__4EDDB18F")
+  VsKH                                      Float         @default(0.0000000000000000, map: "DF__Gruppenver__VsKH__4FD1D5C8")
+  VsTK                                      Float         @default(0.0000000000000000, map: "DF__Gruppenver__VsTK__50C5FA01")
+  VsIU                                      Float         @default(0.0000000000000000, map: "DF__Gruppenver__VsIU__51BA1E3A")
+  VsSchutz                                  Float         @default(0.0000000000000000, map: "DF__Gruppenve__VsSch__52AE4273")
+  SbVK                                      Float         @default(0.0000000000000000, map: "DF__Gruppenver__SbVK__53A266AC")
+  SbTK                                      Float         @default(0.0000000000000000, map: "DF__Gruppenver__SbTK__54968AE5")
+  SbIU                                      Float         @default(0.0000000000000000, map: "DF__Gruppenver__SbIU__558AAF1E")
+  SbSchutz                                  Float         @default(0.0000000000000000, map: "DF__Gruppenve__SbSch__567ED357")
+  SbKH                                      Float         @default(0.0000000000000000, map: "DF__Gruppenver__SbKH__5772F790")
+  BedKH                                     String?       @db.NVarChar(Max)
+  BedVK                                     String?       @db.NVarChar(Max)
+  BedTK                                     String?       @db.NVarChar(Max)
+  BedIU                                     String?       @db.NVarChar(Max)
+  BedSchutz                                 String?       @db.NVarChar(Max)
+  BeitragVK                                 Float         @default(0.0000000000000000, map: "DF__Gruppenve__Beitr__58671BC9")
+  BeitragTK                                 Float         @default(0.0000000000000000, map: "DF__Gruppenve__Beitr__595B4002")
+  BeitragIU                                 Float         @default(0.0000000000000000, map: "DF__Gruppenve__Beitr__5A4F643B")
+  BeitragSchutz                             Float         @default(0.0000000000000000, map: "DF__Gruppenve__Beitr__5B438874")
+  BeitragKH                                 Float         @default(0.0000000000000000, map: "DF__Gruppenve__Beitr__5C37ACAD")
+  Jahresbeitrag                             Float         @default(0.0000000000000000, map: "DF__Gruppenve__Jahre__5D2BD0E6")
+  Zahlweise                                 String?       @db.NVarChar(Max)
+  VersicherungsdienstleisterDienstleisterId Int           @default(0, map: "DF__Gruppenve__Versi__5E1FF51F")
+  KundeTenantItemId                         Int           @default(0, map: "DF__Gruppenve__Kunde__5F141958")
+  StandardBeitragIU                         Float         @default(0.0000000000000000, map: "DF__Gruppenve__Stand__60083D91")
+  StandardBeitragKH                         Float         @default(0.0000000000000000, map: "DF__Gruppenve__Stand__60FC61CA")
+  StandardBeitragSchutz                     Float         @default(0.0000000000000000, map: "DF__Gruppenve__Stand__61F08603")
+  StandardBeitragTK                         Float         @default(0.0000000000000000, map: "DF__Gruppenve__Stand__62E4AA3C")
+  StandardBeitragVK                         Float         @default(0.0000000000000000, map: "DF__Gruppenve__Stand__63D8CE75")
+  ExternalDataField                         String?       @db.VarChar(Max)
+  Fahrzeuge                                 Fahrzeuge[]
+  Dienstleister                             Dienstleister @relation(fields: [VersicherungsdienstleisterDienstleisterId], references: [DienstleisterId], onDelete: Cascade, onUpdate: NoAction, map: "FK_Gruppenversicherung_Dienstleister_VersicherungsdienstleisterDienstleisterId")
+  Kunden                                    Kunden        @relation(fields: [KundeTenantItemId], references: [TenantItemId], onDelete: Cascade, onUpdate: NoAction, map: "FK_Gruppenversicherung_Kunden_KundeTenantItemId")
+}
+
+model Gruppenversicherungsvertrag {
+  GruppenversicherungsvertragId Int         @id(map: "PK_Gruppenversicherungsvertrag") @default(autoincrement())
+  Vertragsnummer                String?     @db.NVarChar(Max)
+  BeitragVK                     Float       @default(0.0000000000000000, map: "DF__Gruppenve__Beitr__473C8FC7")
+  BeitragTK                     Float       @default(0.0000000000000000, map: "DF__Gruppenve__Beitr__4830B400")
+  BeitragIU                     Float       @default(0.0000000000000000, map: "DF__Gruppenve__Beitr__4924D839")
+  BeitragSchutz                 Float       @default(0.0000000000000000, map: "DF__Gruppenve__Beitr__4A18FC72")
+  BeitragKH                     Float       @default(0.0000000000000000, map: "DF__Gruppenve__Beitr__4B0D20AB")
+  GruppenversicherungId         Int?
+  Kennzeichen                   String?     @db.NVarChar(Max)
+  Fahrzeuge                     Fahrzeuge[]
+}
+
+model IdMappings {
+  IdMappingsId    Int     @id(map: "PK_IdMappings") @default(autoincrement())
+  DienstleisterId Int
+  KategorieId     Int
+  KategorieTyp    String? @db.NVarChar(Max)
+}
+
+model ImplCategories {
+  ImplCategoryId    Int                 @id(map: "PK_ImplCategories") @default(autoincrement())
+  Name              String?             @db.NVarChar(Max)
+  KundeTenantItemId Int?
+  Kunden            Kunden?             @relation(fields: [KundeTenantItemId], references: [TenantItemId], onDelete: NoAction, onUpdate: NoAction, map: "FK_ImplCategories_Kunden_KundeTenantItemId")
+  ImplSubCategories ImplSubCategories[]
+}
+
+model ImplProperties {
+  ImplPropertyId    Int               @id(map: "PK_ImplProperties") @default(autoincrement())
+  Name              String?           @db.NVarChar(Max)
+  ImplSubCategoryId Int               @default(0, map: "DF__ImplPrope__ImplS__3DB3258D")
+  Value             String?           @db.NVarChar(Max)
+  KundeTenantItemId Int?
+  ImplSubCategories ImplSubCategories @relation(fields: [ImplSubCategoryId], references: [ImplSubCategoryId], onDelete: Cascade, onUpdate: NoAction, map: "FK_ImplProperties_ImplSubCategories_ImplSubCategoryId")
+  Kunden            Kunden?           @relation(fields: [KundeTenantItemId], references: [TenantItemId], onDelete: NoAction, onUpdate: NoAction, map: "FK_ImplProperties_Kunden_KundeTenantItemId")
+}
+
+model ImplSubCategories {
+  ImplSubCategoryId Int              @id(map: "PK_ImplSubCategories") @default(autoincrement())
+  Name              String?          @db.NVarChar(Max)
+  ImplCategoryId    Int              @default(0, map: "DF__ImplSubCa__ImplC__38EE7070")
+  KundeTenantItemId Int?
+  ImplProperties    ImplProperties[]
+  ImplCategories    ImplCategories   @relation(fields: [ImplCategoryId], references: [ImplCategoryId], onDelete: Cascade, onUpdate: NoAction, map: "FK_ImplSubCategories_ImplCategories_ImplCategoryId")
+  Kunden            Kunden?          @relation(fields: [KundeTenantItemId], references: [TenantItemId], onDelete: NoAction, onUpdate: NoAction, map: "FK_ImplSubCategories_Kunden_KundeTenantItemId")
+}
+
+model ImportPropertyMaps {
+  ImportPropertyMapId      Int             @id(map: "PK_ImportPropertyMaps") @default(autoincrement())
+  ImportProperties         String?         @db.NVarChar(Max)
+  DataSourceColumn         String?         @db.NVarChar(Max)
+  ImportTemplateTemplateId Int             @default(0, map: "DF__ImportPro__Impor__351DDF8C")
+  Parent                   String?         @db.NVarChar(Max)
+  ImportTemplates          ImportTemplates @relation(fields: [ImportTemplateTemplateId], references: [TemplateId], onDelete: Cascade, onUpdate: NoAction, map: "FK_ImportPropertyMaps_ImportTemplates_ImportTemplateTemplateId")
+}
+
+model ImportTemplates {
+  TemplateId         Int                  @id(map: "PK_ImportTemplates") @default(autoincrement())
+  TemplateName       String?              @db.NVarChar(Max)
+  ScopedEntities     String?              @db.NVarChar(Max)
+  DataFieldConfigs   DataFieldConfigs[]
+  EnumImportConfigs  EnumImportConfigs[]
+  ImportPropertyMaps ImportPropertyMaps[]
+}
+
+model Kaufvertrags {
+  KaufvertragId                  Int         @id(map: "PK_Kaufvertrags") @default(autoincrement())
+  inNuceKaufvertragId            Int
+  Bezeichnung                    String?     @db.NVarChar(Max)
+  Beginn                         DateTime?
+  Ende                           DateTime?
+  Beschreibung                   String?     @db.NVarChar(Max)
+  Vertragsnummer                 String?     @db.NVarChar(Max)
+  Kostenstelle                   String?     @db.NVarChar(Max)
+  VertragspartnerDienstleisterId Int?
+  KundeTenantItemId              Int?
+  ExternalDataField              String?     @db.VarChar(Max)
+  IstAktivGueltigBis             DateTime?
+  Fahrzeuge                      Fahrzeuge[]
+  Kunden                         Kunden?     @relation(fields: [KundeTenantItemId], references: [TenantItemId], onDelete: NoAction, onUpdate: NoAction, map: "FK_Kaufvertrags_Kunden_KundeTenantItemId")
+}
+
+model KontaktBeziehungen {
+  KontaktBeziehungId       Int                  @id(map: "PK_KontaktBeziehungen") @default(autoincrement())
+  BeziehungTyp             String               @db.NVarChar(Max)
+  Bezeichnung              String?              @db.NVarChar(Max)
+  KundeTenantItemId        Int?
+  ParentKontaktBeziehungId Int?
+  FillColor                String?              @db.NVarChar(Max)
+  KontaktBeziehungen       KontaktBeziehungen?  @relation("KontaktBeziehungenToKontaktBeziehungen", fields: [ParentKontaktBeziehungId], references: [KontaktBeziehungId], onDelete: NoAction, onUpdate: NoAction, map: "FK_KontaktBeziehungen_KontaktBeziehungen_ParentKontaktBeziehungId")
+  other_KontaktBeziehungen KontaktBeziehungen[] @relation("KontaktBeziehungenToKontaktBeziehungen")
+  Kunden                   Kunden?              @relation(fields: [KundeTenantItemId], references: [TenantItemId], onDelete: NoAction, onUpdate: NoAction, map: "FK_KontaktBeziehungen_Kunden_KundeTenantItemId")
+}
+
+model Konzern {
+  KonzernId         Int     @id(map: "PK_Konzern") @default(autoincrement())
+  KonzernName       String? @db.NVarChar(Max)
+  ExternalDataField String? @db.VarChar(Max)
+}
+
+model Kostenvoranschlag {
+  KostenvoranschlagId Int            @id(map: "PK_Kostenvoranschlag") @default(autoincrement())
+  Schadennummer       String?        @db.NVarChar(Max)
+  Kennzeichen         String?        @db.NVarChar(Max)
+  UniqueKvId          String?        @db.NVarChar(Max)
+  KvStatus            String         @db.NVarChar(Max)
+  Bemerkung           String?        @db.NVarChar(Max)
+  Eingangsdatum       DateTime?
+  SchadenId           Int?
+  Gesamtkosten        Decimal        @default(0.0, map: "DF__Kostenvor__Gesam__76D69450") @db.Decimal(18, 2)
+  Erstzulassung       String?        @db.NVarChar(Max)
+  Halter              String?        @db.NVarChar(Max)
+  HalterAnschrift     String?        @db.NVarChar(Max)
+  Hersteller          String?        @db.NVarChar(Max)
+  VIN                 String?        @db.NVarChar(Max)
+  Werkstatt           String?        @db.NVarChar(Max)
+  Korrekturbetrag     Decimal        @default(0.0, map: "DF__Kostenvor__Korre__25DB9BFC") @db.Decimal(18, 2)
+  Schadenart          String         @db.NVarChar(Max)
+  Arbeitszeit         Arbeitszeit[]
+  Ersatzteil          Ersatzteil[]
+  Schaden             Schaden?       @relation(fields: [SchadenId], references: [Id], onDelete: NoAction, onUpdate: NoAction, map: "FK_Kostenvoranschlag_Schaden_SchadenId")
+  Lackmaterial        Lackmaterial[]
+  Nebenkosten         Nebenkosten[]
+}
+
+model Kunden {
+  TenantItemId              Int                         @id(map: "PK_Kunden") @default(autoincrement())
+  Anrede                    Int?
+  Vorname                   String?                     @db.NVarChar(Max)
+  Nachname                  String?                     @db.NVarChar(Max)
+  Firmenbezeichnung         String?                     @db.NVarChar(Max)
+  NameNiederlassung         String?                     @db.NVarChar(Max)
+  Vertragsnummer            String?                     @db.NVarChar(Max)
+  OnlineZugang              Boolean
+  Domain                    String?                     @db.NVarChar(Max)
+  BetreuendeEinheit         String?                     @db.NVarChar(Max)
+  InNuceKndNr               String?                     @db.NVarChar(Max)
+  InNuceMatchCode           String?                     @db.NVarChar(Max)
+  IstAktiv                  Boolean?
+  IstAktivGueltigAb         DateTime?
+  IstAktivGueltigBis        DateTime?
+  KonzernId                 Int?
+  IstFuhrparkmanagement     Boolean
+  ExternalDataField         String?                     @db.VarChar(Max)
+  Dokumentueberwachung      Boolean
+  Kundenbetreuer            String?                     @db.NVarChar(Max)
+  AkquiseStatus             String?                     @db.NVarChar(Max)
+  KontaktTyp                String?                     @db.NVarChar(Max)
+  DriverCheckId             String?                     @db.NVarChar(Max)
+  Kundencode                String?                     @db.NVarChar(255)
+  Dienstleistungspauschalen Dienstleistungspauschalen[]
+  Fahrer                    Fahrer[]
+  Fahrzeuge                 Fahrzeuge[]
+  Gruppenversicherung       Gruppenversicherung[]
+  ImplCategories            ImplCategories[]
+  ImplProperties            ImplProperties[]
+  ImplSubCategories         ImplSubCategories[]
+  Kaufvertrags              Kaufvertrags[]
+  KontaktBeziehungen        KontaktBeziehungen[]
+  Regelwerk                 Regelwerk[]
+  Benutzer                  Benutzer[]
+  @@index([Kundencode], map: "DF__Kunden__Kundenco__542C7691")
+}
+
+model Lackierarbeit {
+  LackierarbeitId      Int     @id(map: "PK_Lackierarbeit") @default(autoincrement())
+  LS                   String? @db.NVarChar(Max)
+  DVN                  String? @db.NVarChar(Max)
+  APN                  String? @db.NVarChar(Max)
+  Stufe                String? @db.NVarChar(Max)
+  ZeiteinheitenAusKv   Decimal @db.Decimal(18, 2)
+  PreisProEinheitAusKv Decimal @db.Decimal(18, 2)
+  GesamtpreisAusKv     Decimal @db.Decimal(18, 2)
+  ZeiteinheitenFinal   Decimal @db.Decimal(18, 2)
+  PreisProEinheitFinal Decimal @db.Decimal(18, 2)
+  GesamtpreisFinal     Decimal @db.Decimal(18, 2)
+  Bezeichnung          String? @db.NVarChar(Max)
+  UniqueKvId           String? @db.NVarChar(Max)
+  PositionStatus       Int
+  Bemerkung            String? @db.NVarChar(Max)
+  KostenvoranschlagId  Int
+}
+
+model Lackmaterial {
+  LackmaterialId      Int               @id(map: "PK_Lackmaterial") @default(autoincrement())
+  Bezeichnung         String?           @db.NVarChar(Max)
+  PositionStatus      Int
+  GesamtpreisAusKv    Decimal           @db.Decimal(18, 2)
+  GesamtpreisFinal    Decimal           @db.Decimal(18, 2)
+  KostenvoranschlagId Int
+  UniqueKvId          String?           @db.NVarChar(Max)
+  AnzahlAusKv         Int               @default(0, map: "DF__Lackmater__Anzah__5B638405")
+  AnzahlFinal         Int               @default(0, map: "DF__Lackmater__Anzah__5C57A83E")
+  EinzelpreisAusKv    Decimal           @default(0.0, map: "DF__Lackmater__Einze__5D4BCC77") @db.Decimal(18, 2)
+  EinzelpreisFinal    Decimal           @default(0.0, map: "DF__Lackmater__Einze__5E3FF0B0") @db.Decimal(18, 2)
+  Bemerkung           String?           @db.NVarChar(Max)
+  DVN                 String?           @db.NVarChar(Max)
+  Lackart             String?           @db.NVarChar(Max)
+  Lackiermethode      String?           @db.NVarChar(Max)
+  Kostenvoranschlag   Kostenvoranschlag @relation(fields: [KostenvoranschlagId], references: [KostenvoranschlagId], onDelete: Cascade, onUpdate: NoAction, map: "FK_Lackmaterial_Kostenvoranschlag_KostenvoranschlagId")
+}
+
+model LackProviders {
+  LackProviderId Int     @id(map: "PK_LackProviders") @default(autoincrement())
+  Name           String? @db.NVarChar(450)
+}
+
+model Leasingrechnung {
+  LeasingRechnungId         Int        @id(map: "PK_Leasingrechnung") @default(autoincrement())
+  Konto                     String?    @db.NVarChar(Max)
+  KdNr                      String?    @db.NVarChar(Max)
+  Kundenname                String?    @db.NVarChar(Max)
+  Rechnungsdatum            DateTime?
+  Rechnungsposition         Int
+  Waehrung                  String?    @db.NVarChar(Max)
+  BetragNetto               Decimal    @db.Decimal(18, 2)
+  Ust                       String?    @db.NVarChar(Max)
+  BetragUst                 Decimal    @db.Decimal(18, 2)
+  AbrechnungszeitraumBeginn DateTime?
+  AbrechnungszeitraumEnde   DateTime?
+  Leistungsart              String?    @db.NVarChar(Max)
+  Vertragsnummer            String?    @db.NVarChar(Max)
+  Kennzeichen               String?    @db.NVarChar(Max)
+  Versicherungsbeginn       DateTime?
+  Versicherungsende         DateTime?
+  Kostenstelle              String?    @db.NVarChar(Max)
+  Zusatztext                String?    @db.NVarChar(Max)
+  FahrzeugTenantItemId      Int?
+  Fahrzeuge                 Fahrzeuge? @relation(fields: [FahrzeugTenantItemId], references: [TenantItemId], onDelete: NoAction, onUpdate: NoAction, map: "FK_Leasingrechnung_Fahrzeuge_FahrzeugTenantItemId")
+}
+
+model Leasingvertrag {
+  LeasingvertragId                                   Int       @id(map: "PK_Leasingvertrag") @default(autoincrement())
+  InNuceLeasingvertragId                             String?   @db.NVarChar(Max)
+  TenantItemId                                       Int
+  LeasingStatus                                      Boolean?
+  Bezeichnung                                        String?   @db.NVarChar(Max)
+  Beginn                                             DateTime?
+  Ende                                               DateTime?
+  Beschreibung                                       String?   @db.NVarChar(Max)
+  Jahreslaufleistung                                 Int
+  Laufzeit                                           Int
+  LeasingLaufzeitGesamt                              Int
+  Leasingart                                         String?   @db.NVarChar(Max)
+  NettoGesamtMonatsrate                              Float
+  NettoFinanzleasingMonatsrate                       Float
+  Leasingfaktor                                      Float
+  Gehaltsverzicht                                    Boolean
+  FinanzleasingMehrkilometerFreigrenze               Int
+  FinanzleasingMinderkilometerFreigrenze             Int
+  FinanzleasingMehrkilometerFaktor                   Float
+  FinanzleasingMinderkilometerFaktor                 Float
+  FinanzleasingMinderkilometerMaximal                Int?
+  FinanzleasingMinderkilometerMaximalRueckerstattung Int?
+  WartungsUndVerschlei_pauschaleBetrag               Float     @map("WartungsUndVerschleißpauschaleBetrag")
+  WartungsUndVerschlei_MehrkilometerFreigrenze       Int       @map("WartungsUndVerschleißMehrkilometerFreigrenze")
+  WartungsUndVerschlei_MinderkilometerFreigrenze     Int       @map("WartungsUndVerschleißMinderkilometerFreigrenze")
+  WartungsUndVerschlei_MehrkilometerFaktor           Float     @map("WartungsUndVerschleißMehrkilometerFaktor")
+  WartungsUndVerschlei_MinderkilometerFaktor         Float     @map("WartungsUndVerschleißMinderkilometerFaktor")
+  Abrechnungsart                                     String?   @db.NVarChar(Max)
+  Sommerreifen                                       Float
+  Winterreifen                                       Float
+  Ganzjahresreifen                                   String?   @db.NVarChar(Max)
+  Reifenwechsel                                      Float
+  Reifensatzkontingent                               String?   @db.NVarChar(Max)
+  Felgenart                                          String?   @db.NVarChar(Max)
+  SaisonaleBereifung                                 Boolean?
+  Einlagerung                                        String?   @db.NVarChar(Max)
+  VersicherungsbetragGesamt                          Float
+  Versicherungshandling                              Float
+  HaftpflichtBetrag                                  Float
+  VollkaskoBetrag                                    Float
+  SelbstbeteiligungVollkaskoBetrag                   Float
+  TeilkaskoBetrag                                    Float
+  SelbstBeteiligungTeilkaskoBetrag                   Float
+  Fahrereinmalzahlung                                Float
+  Verwaltungspauschale                               Float
+  GEZ                                                Float
+  Steuern                                            Float
+  ServiceUndTankkarte                                Float
+  Kraftstoffpauschale                                Float
+  KaskoSchutz                                        Float
+  MietwagenKosten                                    Float
+  KmBeiVertragsendeLeasing                           Int
+  MehrkilometerBeiVertragsende                       Int
+  StillschweigendeVerlaengerung                      Boolean?
+  VerlaengerungLeasingvertragBis                     DateTime?
+  Laufleistung                                       Int?
+  LaufleistungStand                                  DateTime?
+  LaufleistungAktuell                                Int?
+  LaufleistungRest                                   Int?
+  IstAktiv                                           Boolean?
+  IstAktivGueltigAb                                  DateTime?
+  IstAktivGueltigBis                                 DateTime?
+  Kostenstelle1                                      String?   @db.NVarChar(Max)
+  Kostenstelle2                                      String?   @db.NVarChar(Max)
+  Mietkauf                                           Boolean?
+  InNuceKeyDienstleisterDienstleisterId              Int?
+  AusliefenderHaendlerDienstleisterId                Int?
+  KundeTenantItemId                                  Int?
+  LeasingvertragVertragsnummer                       String?   @db.NVarChar(Max)
+  ExternalDataField                                  String?   @db.VarChar(Max)
+}
+
+model Lieferschein {
+  LieferscheinId Int      @id(map: "PK_Lieferschein") @default(autoincrement())
+  Pos            Int?
+  Teilenummer    String?  @db.NVarChar(50)
+  Bezeichnung    String?  @db.NVarChar(Max)
+  Menge          Int?
+  Upe            String?  @db.VarChar(50)
+  Rabatt         Decimal? @db.Decimal(18, 0)
+  EPreis         Decimal? @db.Decimal(18, 0)
+  Betrag         Decimal? @db.Decimal(18, 0)
+  MfilesType     Int?
+  MfilesId       Int?
+}
+
+model Lieferscheine {
+  LieferscheinId             Int      @id(map: "PK_Lieferscheine") @default(autoincrement())
+  LieferscheinNummer         String?  @db.NVarChar(Max)
+  Schadennummer              String?  @db.NVarChar(Max)
+  SchadennummerRueckstand    String?  @db.NVarChar(Max)
+  Auftragsnummer             String?  @db.NVarChar(Max)
+  Lieferant                  String?  @db.NVarChar(Max)
+  KundeName                  String?  @db.NVarChar(Max)
+  KundeAnschrift             String?  @db.NVarChar(Max)
+  KundeNr                    String?  @db.NVarChar(Max)
+  RechnungNr                 String?  @db.NVarChar(Max)
+  RechnungsDatum             String?  @db.NVarChar(Max)
+  AuftragsNr                 String?  @db.NVarChar(Max)
+  AuftragsNrRueckstand       String?  @db.NVarChar(Max)
+  AuftragsDatum              String?  @db.NVarChar(Max)
+  Ansprechpartner            String?  @db.NVarChar(Max)
+  Vin                        String?  @db.NVarChar(Max)
+  VinRueckstand              String?  @db.NVarChar(Max)
+  Kennzeichen                String?  @db.NVarChar(Max)
+  KennzeichenRueckstand      String?  @db.NVarChar(Max)
+  LieferscheinDatum          String?  @db.NVarChar(Max)
+  Leistungsdatum             String?  @db.NVarChar(Max)
+  AuftragsArt                String?  @db.NVarChar(Max)
+  AnnahmeDatum               String?  @db.NVarChar(Max)
+  LieferArt                  String?  @db.NVarChar(Max)
+  FahrzeugHersteller         String?  @db.NVarChar(Max)
+  LieferscheinUniqueId       String?  @db.NVarChar(Max)
+  UebergebenAnParts          Boolean
+  UebergabePartsDatumUhrzeit DateTime
+  MfilesId                   Int?
+  MfilesType                 Int?
+}
+
+model LieferscheinPositionen {
+  LieferscheinPositionId Int     @id(map: "PK_LieferscheinPositionen") @default(autoincrement())
+  Pos                    Int?
+  Teilenummer            String? @db.NVarChar(Max)
+  Bezeichnung            String? @db.NVarChar(Max)
+  Menge                  Int?
+  Upe                    String? @db.NVarChar(Max)
+  Rabatt                 Float?
+  EPreis                 Float?
+  Betrag                 Float?
+  LieferscheinId         Int
+}
+
+model Logbuch {
+  LogbuchId     Int       @id(map: "PK_Logbuch") @default(autoincrement())
+  LogTime       DateTime?
+  LogUser       String?   @db.NVarChar(Max)
+  LogText       String?   @db.NVarChar(Max)
+  LogTopic      String?   @db.NVarChar(Max)
+  IsPrivate     Boolean
+  SchadenNummer String?   @db.NVarChar(Max)
+  System        String?   @db.NVarChar(Max)
+  Aktivitaet    String?   @db.NVarChar(Max)
+  Termin        DateTime?
+  Aufgabe       String?   @db.NVarChar(Max)
+  SchadenId     Int?
+  KundeId       Int?
+  FahrzeugId    Int?
+  FahrerId      Int?
+  FavoritId     String?   @db.NVarChar(Max)
+}
+
+model Mietvertrag {
+  MietvertragId                  Int         @id(map: "PK_Mietvertrag") @default(autoincrement())
+  TenantItemId                   Int
+  inNuceMietvertragId            Int
+  VertragspartnerDienstleisterId Int?
+  MietwagenVertragsnummer        String?     @db.NVarChar(Max)
+  Bezeichnung                    String?     @db.NVarChar(Max)
+  Beginn                         DateTime?
+  Ende                           DateTime?
+  Beschreibung                   String?     @db.NVarChar(Max)
+  Jahreslaufleistung             Int
+  Laufzeit                       Int
+  Mehrtagespreis                 Float
+  MietpreisProTag                Float
+  Gesamtmietpreis                Float
+  Mietart                        String?     @db.NVarChar(Max)
+  KundeTenantItemId              Int?
+  ExternalDataField              String?     @db.VarChar(Max)
+  IstAktivGueltigBis             DateTime?
+  Fahrzeuge                      Fahrzeuge[]
+}
+
+model MietwagenRechnungPositionen {
+  MietwagenRechnungPositionenId Int      @id(map: "PK_MietwagenRechnungPositionen") @default(autoincrement())
+  Beschreibung                  String?  @db.VarChar(Max)
+  Einheit                       String?  @db.VarChar(50)
+  Anzahl                        Decimal? @db.Decimal(18, 0)
+  Einzelpreis                   Decimal? @db.Decimal(18, 0)
+  Gesamtpreis                   Decimal? @db.Decimal(18, 0)
+}
+
+model Nebenkosten {
+  NebenkostenId        Int               @id(map: "PK_Nebenkosten") @default(autoincrement())
+  RC                   String?           @db.NVarChar(Max)
+  DVN                  String?           @db.NVarChar(Max)
+  ETN                  String?           @db.NVarChar(Max)
+  AnzahlAusKv          Decimal           @db.Decimal(18, 2)
+  PreisProEinheitAusKv Decimal           @db.Decimal(18, 2)
+  GesamtpreisAusKv     Decimal           @db.Decimal(18, 2)
+  AnzahlFinal          Decimal           @db.Decimal(18, 2)
+  PreisProEinheitFinal Decimal           @db.Decimal(18, 2)
+  GesamtpreisFinal     Decimal           @db.Decimal(18, 2)
+  Bezeichnung          String?           @db.NVarChar(Max)
+  UniqueKvId           String?           @db.NVarChar(Max)
+  PositionStatus       Int
+  Bemerkung            String?           @db.NVarChar(Max)
+  KostenvoranschlagId  Int
+  Kostenvoranschlag    Kostenvoranschlag @relation(fields: [KostenvoranschlagId], references: [KostenvoranschlagId], onDelete: Cascade, onUpdate: NoAction, map: "FK_Nebenkosten_Kostenvoranschlag_KostenvoranschlagId")
+}
+
+model Regelwerk {
+  RegelwerkId       Int      @id(map: "PK_Regelwerk") @default(autoincrement())
+  Name              String?  @db.NVarChar(Max)
+  RegelWerkDaten    String?  @db.NVarChar(Max)
+  TenantItemId      Int?
+  KundeTenantItemId Int?
+  Arbeitsbereich    String   @default("N'", map: "DF__Regelwerk__Arbei__762C88DA") @db.NVarChar(Max)
+  PeriodEnd         DateTime @default(dbgenerated("9999-12-31T23:59:59.9999999"), map: "DF__Regelwerk__Perio__7720AD13")
+  PeriodStart       DateTime @default(dbgenerated("0001-01-01T00:00:00.0000000"), map: "DF__Regelwerk__Perio__7814D14C")
+  Kunden            Kunden?  @relation(fields: [KundeTenantItemId], references: [TenantItemId], onDelete: NoAction, onUpdate: NoAction, map: "FK_Regelwerk_Kunden_KundeTenantItemId")
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
+model RegelwerkHistory {
+  RegelwerkId       Int
+  Name              String?  @db.NVarChar(Max)
+  RegelWerkDaten    String?  @db.NVarChar(Max)
+  TenantItemId      Int?
+  KundeTenantItemId Int?
+  Arbeitsbereich    String   @db.NVarChar(Max)
+  PeriodEnd         DateTime
+  PeriodStart       DateTime
+
+  @@index([PeriodEnd, PeriodStart], map: "ix_RegelwerkHistory", clustered: true)
+  @@ignore
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
+model ReifenHistory {
+  ReifenId                Int
+  HerstellerDienstleister String?  @db.NVarChar(Max)
+  Reifengroesse           String?  @db.NVarChar(Max)
+  Profilbezeichnung       String?  @db.NVarChar(Max)
+  DOT                     Int
+  Bemerkung               String?  @db.NVarChar(Max)
+  ProfiltiefeMesspunkt1   Float?
+  ProfiltiefeMesspunkt2   Float?
+  ProfiltiefeMesspunkt3   Float?
+  MontagePosition         String?  @db.NVarChar(Max)
+  Lagerort                String?  @db.NVarChar(Max)
+  PeriodEnd               DateTime
+  PeriodStart             DateTime
+  ReifenKonfigurationId   Int
+
+  @@ignore
+}
+
+model ReifenKonfiguration {
+  ReifenKonfigurationId Int      @id(map: "PK__ReifenKo__938FFF582D24BDEE") @default(autoincrement())
+  KonfigurationName     String   @db.NVarChar(Max)
+  Bemerkung             String?  @db.NVarChar(Max)
+  LagerNummer           String?  @db.NVarChar(Max)
+  PeriodEnd             DateTime
+  PeriodStart           DateTime
+  FahrzeugTenantItemId  Int?
+  CurrentConfig         Boolean  @default(dbgenerated("CONVERT([bit],(0))"), map: "DF__ReifenKon__Curre__7073AF84")
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
+model ReifenKonfigurationHistory {
+  ReifenKonfigurationId Int
+  KonfigurationName     String   @db.NVarChar(Max)
+  Bemerkung             String?  @db.NVarChar(Max)
+  LagerNummer           String?  @db.NVarChar(Max)
+  PeriodEnd             DateTime
+  PeriodStart           DateTime
+  FahrzeugTenantItemId  Int?
+  CurrentConfig         Boolean
+
+  @@ignore
+}
+
+model RentalConfirmedCreates {
+  tradingPartnerId           String?   @db.NVarChar(4000)
+  transactionId              String?   @db.NVarChar(4000)
+  secondaryTransactionId     String?   @db.NVarChar(4000)
+  firstName                  String?   @db.NVarChar(4000)
+  lastName                   String?   @db.NVarChar(4000)
+  identificationNumber       String?   @db.NVarChar(4000)
+  transactionApprover        String?   @db.NVarChar(4000)
+  vehicleClass               String?   @db.NVarChar(4000)
+  vehicleDescription         String?   @db.NVarChar(4000)
+  billToPercent              String?   @db.NVarChar(4000)
+  fixedAuthorization         String?   @db.NVarChar(4000)
+  maximumEntitlement         String?   @db.NVarChar(4000)
+  CarId                      Int?
+  Id                         Int       @id(map: "PK_RentalConfirmedCreates") @default(autoincrement())
+  officeId                   String?   @db.NVarChar(4000)
+  transmissionId             String?   @db.NVarChar(4000)
+  transmissionDateTime       DateTime?
+  transmissionType           String?   @db.NVarChar(4000)
+  transactionOwner           String?   @db.NVarChar(4000)
+  RequestState               String?   @db.NVarChar(Max)
+  ResponseFullData           String?   @db.NVarChar(Max)
+  UpdateNotificationRequest  String?   @db.NVarChar(Max)
+  UpdateNotificationResponse String?   @db.NVarChar(Max)
+  claimNumber                String    @db.NVarChar(20)
+}
+
+model Schaden {
+  Id                                    Int                 @id(map: "PK_Schaden") @default(autoincrement())
+  SchadenNummer                         String              @db.NVarChar(450)
+  Schadendatum                          DateTime?
+  Schadenmeldedatum                     DateTime?
+  Schadenart                            String              @db.NVarChar(Max)
+  Schadenstatus                         String              @db.NVarChar(Max)
+  Schadensort                           String              @db.NVarChar(Max)
+  Fahrzeugstatus                        String              @db.NVarChar(Max)
+  SchadennummernVersicherer             String?             @db.NVarChar(Max)
+  Personenschaden                       Boolean?
+  Vertragsnummer                        String?             @db.NVarChar(Max)
+  Kennzeichen                           String?             @db.NVarChar(Max)
+  Fin                                   String?             @db.NVarChar(Max)
+  Erstzulassung                         DateTime?
+  FahrzeugTyp                           String?             @db.NVarChar(Max)
+  FahrzeugModell                        String?             @db.NVarChar(Max)
+  Kundenname                            String?             @db.NVarChar(Max)
+  Versicherungsgesellschaft             String?             @db.NVarChar(Max)
+  InNuceInsuranceNo                     String?             @db.NVarChar(Max)
+  InNuceSchaden                         String?             @db.NVarChar(Max)
+  FahrerName                            String?             @db.NVarChar(Max)
+  FahrerVorname                         String?             @db.NVarChar(Max)
+  FahrerKlassen                         String?             @db.NVarChar(Max)
+  FahrerSeit                            DateTime?
+  LaufleistungInKm                      Int
+  Schadengruppe                         String              @db.NVarChar(Max)
+  Schadenursache                        String?             @db.NVarChar(Max)
+  Alkohol                               Boolean
+  PrivatDienstfahrt                     String?             @db.NVarChar(Max)
+  Schadenschilderung                    String?             @db.NVarChar(Max)
+  Beschaedigung_VorneRechts             Boolean?
+  Beschaedigung_TuerVorneRechts         Boolean?
+  Beschaedigung_TuerHintenRechts        Boolean?
+  Beschaedigung_HintenRechts            Boolean?
+  Beschaedigung_Haube                   Boolean?
+  Beschaedigung_Frontscheibe            Boolean?
+  Beschaedigung_Dach                    Boolean?
+  Beschaedigung_Heckscheibe             Boolean?
+  Beschaedigung_Heck                    Boolean?
+  Beschaedigung_VorneLinks              Boolean?
+  Beschaedigung_TuerVorneLinks          Boolean?
+  Beschaedigung_TuerHintenLinks         Boolean?
+  Beschaedigung_HintenLinks             Boolean?
+  Beschaedigungen                       String?             @db.NVarChar(Max)
+  NichtVerkehrssicher                   Boolean?
+  NichtFahrbereit                       Boolean?
+  InNuceKndNr                           String?             @db.NVarChar(Max)
+  KundeTenantItemId                     Int
+  FahrzeugTenantItemId                  Int
+  Zusatzinformationen                   String?             @db.NVarChar(Max)
+  Abholung                              Boolean?
+  WunschTermin                          DateTime?
+  WerkstattTermin                       DateTime?
+  Abholadresse                          String              @db.NVarChar(Max)
+  ReparaturAustausch                    String?             @db.NVarChar(Max)
+  Besichtigungsort                      String              @db.NVarChar(Max)
+  GutachtenTyp                          String              @db.NVarChar(Max)
+  Gutachter                             String?             @db.NVarChar(Max)
+  Gutachterfestlegung                   Boolean
+  GutachterfestlegungText               String?             @db.NVarChar(Max)
+  GkkBilder                             Boolean
+  GutachterZusatzInfo                   String?             @db.NVarChar(Max)
+  Reparaturkosten                       Decimal             @db.Decimal(18, 2)
+  Restwert                              Decimal             @db.Decimal(18, 2)
+  GutschriftVersicherung                Decimal             @db.Decimal(18, 2)
+  Eigenanteil                           Decimal             @db.Decimal(18, 2)
+  SummeGutachten                        Decimal             @db.Decimal(18, 2)
+  SummeKostenvoranschlag                Decimal             @db.Decimal(18, 2)
+  KostenKarosserieInstandhaltung        Decimal             @db.Decimal(18, 2)
+  Mietwagenkosten                       Decimal             @db.Decimal(18, 2)
+  KostenWindschutzscheibeInstandhaltung Decimal             @db.Decimal(18, 2)
+  Gutachterkosten                       Decimal             @db.Decimal(18, 2)
+  Wertminderung                         Decimal             @db.Decimal(18, 2)
+  Wiederbeschaffungswert                Decimal             @db.Decimal(18, 2)
+  NutzungsausfallInTagen                Int
+  NutzungsausfallProTag                 Decimal             @db.Decimal(18, 2)
+  NutzungsausfallGesamt                 Decimal             @db.Decimal(18, 2)
+  Nutzungsausfallgruppe                 String?             @db.NVarChar(Max)
+  Anlieferungsort                       String              @db.NVarChar(Max)
+  Steuerungsvorgabe                     String?             @db.NVarChar(Max)
+  Vermieter                             String?             @db.NVarChar(Max)
+  Anlieferungszeitpunkt                 DateTime?
+  MietwagenTyp                          String              @db.NVarChar(Max)
+  RueckgabeZeitpunkt                    DateTime?
+  Reservierungsnummer                   String?             @db.NVarChar(Max)
+  Kommentar                             String?             @db.NVarChar(Max)
+  VersicherungId                        Int?
+  DienstleisterId                       Int?
+  ClaimDocumentExportId                 Int?
+  IstAktiv                              Boolean?
+  IstAktivGueltigAb                     DateTime?
+  IstAktivGueltigBis                    DateTime?
+  SchadenortTypId                       Int?
+  Kostenstelle1                         String?             @db.NVarChar(Max)
+  Kostenstelle1GueltigAb                DateTime?
+  Kostenstelle2                         String?             @db.NVarChar(Max)
+  Kostenstelle2GueltigAb                DateTime?
+  Rueckgabeort                          String?             @db.VarChar(Max)
+  GutachterBesichtigungstermin          DateTime?
+  SchadenstatusBegruendung              String              @db.NVarChar(Max)
+  Bemerkung1                            String?             @db.NVarChar(Max)
+  Bemerkung2                            String?             @db.NVarChar(Max)
+  BilderErhalten                        Boolean?
+  FreigabeFuhrpark                      Boolean?
+  FreigabeLeasing                       Boolean?
+  FreigabeVU                            Boolean?
+  SGSBilder                             Boolean?
+  GutachtenErhalten                     Boolean?
+  RueckgabeErfolgt                      Boolean?
+  FreigabeMakler                        Boolean?
+  FreigabeNutzer                        Boolean?
+  FremdNummer                           String?             @db.NVarChar(Max)
+  SSHBilder                             Boolean?
+  Email                                 String?             @db.NVarChar(Max)
+  Mobil                                 String?             @db.NVarChar(Max)
+  Ort                                   String?             @db.NVarChar(Max)
+  Plz                                   String?             @db.NVarChar(Max)
+  Strasse                               String?             @db.NVarChar(Max)
+  Telefon                               String?             @db.NVarChar(Max)
+  WerkstattInfo                         String?             @db.NVarChar(Max)
+  PeriodEnd                             DateTime
+  PeriodStart                           DateTime
+  Buchungsposition                      Buchungsposition[]
+  Kostenvoranschlag                     Kostenvoranschlag[]
+}
+
+model SchadenBeteiligter {
+  Id                     Int     @id(map: "PK_SchadenBeteiligter") @default(autoincrement())
+  AdressTyp              String  @db.NVarChar(Max)
+  Anrede                 String? @db.NVarChar(Max)
+  Name                   String? @db.NVarChar(Max)
+  Vorname                String? @db.NVarChar(Max)
+  Land                   Int
+  Strasse                String? @db.NVarChar(Max)
+  Plz                    String? @db.NVarChar(Max)
+  Ort                    String? @db.NVarChar(Max)
+  EmailFirma             String? @db.NVarChar(Max)
+  EmailPrivat            String? @db.NVarChar(Max)
+  TelefonFirma           String? @db.NVarChar(Max)
+  MobilFirma             String? @db.NVarChar(Max)
+  MobilPrivat            String? @db.NVarChar(Max)
+  KfzKennzeichen         String? @db.NVarChar(Max)
+  Versicherung           String? @db.NVarChar(Max)
+  Versicherungsnummer    String? @db.NVarChar(Max)
+  Tagebuchnummer         String? @db.NVarChar(Max)
+  Aktenzeichen           String? @db.NVarChar(Max)
+  Verwarnung             Boolean
+  VerwarnungBeschreibung String? @db.NVarChar(Max)
+  X                      Float?
+  Y                      Float?
+  SchadenId              Int
+  Blutprobe              Boolean
+  Dienststelle           String? @db.NVarChar(Max)
+  Schadennummer          String? @db.NVarChar(Max)
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
+model SchadenHistory {
+  Id                                    Int
+  SchadenNummer                         String    @db.NVarChar(450)
+  Schadendatum                          DateTime?
+  Schadenmeldedatum                     DateTime?
+  Schadenart                            String    @db.NVarChar(Max)
+  Schadenstatus                         String    @db.NVarChar(Max)
+  Schadensort                           String    @db.NVarChar(Max)
+  Fahrzeugstatus                        String    @db.NVarChar(Max)
+  SchadennummernVersicherer             String?   @db.NVarChar(Max)
+  Personenschaden                       Boolean?
+  Vertragsnummer                        String?   @db.NVarChar(Max)
+  Kennzeichen                           String?   @db.NVarChar(Max)
+  Fin                                   String?   @db.NVarChar(Max)
+  Erstzulassung                         DateTime?
+  FahrzeugTyp                           String?   @db.NVarChar(Max)
+  FahrzeugModell                        String?   @db.NVarChar(Max)
+  Kundenname                            String?   @db.NVarChar(Max)
+  Versicherungsgesellschaft             String?   @db.NVarChar(Max)
+  InNuceInsuranceNo                     String?   @db.NVarChar(Max)
+  InNuceSchaden                         String?   @db.NVarChar(Max)
+  FahrerName                            String?   @db.NVarChar(Max)
+  FahrerVorname                         String?   @db.NVarChar(Max)
+  FahrerKlassen                         String?   @db.NVarChar(Max)
+  FahrerSeit                            DateTime?
+  LaufleistungInKm                      Int
+  Schadengruppe                         String    @db.NVarChar(Max)
+  Schadenursache                        String?   @db.NVarChar(Max)
+  Alkohol                               Boolean
+  PrivatDienstfahrt                     String?   @db.NVarChar(Max)
+  Schadenschilderung                    String?   @db.NVarChar(Max)
+  Beschaedigung_VorneRechts             Boolean?
+  Beschaedigung_TuerVorneRechts         Boolean?
+  Beschaedigung_TuerHintenRechts        Boolean?
+  Beschaedigung_HintenRechts            Boolean?
+  Beschaedigung_Haube                   Boolean?
+  Beschaedigung_Frontscheibe            Boolean?
+  Beschaedigung_Dach                    Boolean?
+  Beschaedigung_Heckscheibe             Boolean?
+  Beschaedigung_Heck                    Boolean?
+  Beschaedigung_VorneLinks              Boolean?
+  Beschaedigung_TuerVorneLinks          Boolean?
+  Beschaedigung_TuerHintenLinks         Boolean?
+  Beschaedigung_HintenLinks             Boolean?
+  Beschaedigungen                       String?   @db.NVarChar(Max)
+  NichtVerkehrssicher                   Boolean?
+  NichtFahrbereit                       Boolean?
+  InNuceKndNr                           String?   @db.NVarChar(Max)
+  KundeTenantItemId                     Int
+  FahrzeugTenantItemId                  Int
+  Zusatzinformationen                   String?   @db.NVarChar(Max)
+  Abholung                              Boolean?
+  WunschTermin                          DateTime?
+  WerkstattTermin                       DateTime?
+  Abholadresse                          String    @db.NVarChar(Max)
+  ReparaturAustausch                    String?   @db.NVarChar(Max)
+  Besichtigungsort                      String    @db.NVarChar(Max)
+  GutachtenTyp                          String    @db.NVarChar(Max)
+  Gutachter                             String?   @db.NVarChar(Max)
+  Gutachterfestlegung                   Boolean
+  GutachterfestlegungText               String?   @db.NVarChar(Max)
+  GkkBilder                             Boolean
+  GutachterZusatzInfo                   String?   @db.NVarChar(Max)
+  Reparaturkosten                       Decimal   @db.Decimal(18, 2)
+  Restwert                              Decimal   @db.Decimal(18, 2)
+  GutschriftVersicherung                Decimal   @db.Decimal(18, 2)
+  Eigenanteil                           Decimal   @db.Decimal(18, 2)
+  SummeGutachten                        Decimal   @db.Decimal(18, 2)
+  SummeKostenvoranschlag                Decimal   @db.Decimal(18, 2)
+  KostenKarosserieInstandhaltung        Decimal   @db.Decimal(18, 2)
+  Mietwagenkosten                       Decimal   @db.Decimal(18, 2)
+  KostenWindschutzscheibeInstandhaltung Decimal   @db.Decimal(18, 2)
+  Gutachterkosten                       Decimal   @db.Decimal(18, 2)
+  Wertminderung                         Decimal   @db.Decimal(18, 2)
+  Wiederbeschaffungswert                Decimal   @db.Decimal(18, 2)
+  NutzungsausfallInTagen                Int
+  NutzungsausfallProTag                 Decimal   @db.Decimal(18, 2)
+  NutzungsausfallGesamt                 Decimal   @db.Decimal(18, 2)
+  Nutzungsausfallgruppe                 String?   @db.NVarChar(Max)
+  Anlieferungsort                       String    @db.NVarChar(Max)
+  Steuerungsvorgabe                     String?   @db.NVarChar(Max)
+  Vermieter                             String?   @db.NVarChar(Max)
+  Anlieferungszeitpunkt                 DateTime?
+  MietwagenTyp                          String    @db.NVarChar(Max)
+  RueckgabeZeitpunkt                    DateTime?
+  Reservierungsnummer                   String?   @db.NVarChar(Max)
+  Kommentar                             String?   @db.NVarChar(Max)
+  VersicherungId                        Int?
+  DienstleisterId                       Int?
+  ClaimDocumentExportId                 Int?
+  IstAktiv                              Boolean?
+  IstAktivGueltigAb                     DateTime?
+  IstAktivGueltigBis                    DateTime?
+  SchadenortTypId                       Int?
+  Kostenstelle1                         String?   @db.NVarChar(Max)
+  Kostenstelle1GueltigAb                DateTime?
+  Kostenstelle2                         String?   @db.NVarChar(Max)
+  Kostenstelle2GueltigAb                DateTime?
+  Rueckgabeort                          String?   @db.VarChar(Max)
+  GutachterBesichtigungstermin          DateTime?
+  SchadenstatusBegruendung              String    @db.NVarChar(Max)
+  Bemerkung1                            String?   @db.NVarChar(Max)
+  Bemerkung2                            String?   @db.NVarChar(Max)
+  BilderErhalten                        Boolean?
+  FreigabeFuhrpark                      Boolean?
+  FreigabeLeasing                       Boolean?
+  FreigabeVU                            Boolean?
+  SGSBilder                             Boolean?
+  GutachtenErhalten                     Boolean?
+  RueckgabeErfolgt                      Boolean?
+  FreigabeMakler                        Boolean?
+  FreigabeNutzer                        Boolean?
+  FremdNummer                           String?   @db.NVarChar(Max)
+  SSHBilder                             Boolean?
+  Email                                 String?   @db.NVarChar(Max)
+  Mobil                                 String?   @db.NVarChar(Max)
+  Ort                                   String?   @db.NVarChar(Max)
+  Plz                                   String?   @db.NVarChar(Max)
+  Strasse                               String?   @db.NVarChar(Max)
+  Telefon                               String?   @db.NVarChar(Max)
+  WerkstattInfo                         String?   @db.NVarChar(Max)
+  PeriodEnd                             DateTime
+  PeriodStart                           DateTime
+
+  @@ignore
+}
+
+model Schadennummer {
+  Id          Int     @id(map: "PK_Schadennummer") @default(autoincrement())
+  NumericPart BigInt?
+}
+
+model SchadenortTyp {
+  Id          Int     @id(map: "PK_SchadenortTyp") @default(autoincrement())
+  Bezeichnung String? @db.NVarChar(250)
+}
+
+model ScheduleAppointment {
+  ScheduleAppointmentId Int      @id(map: "PK_ScheduleAppointment") @default(autoincrement())
+  Subject               String?  @db.NVarChar(Max)
+  Location              String?  @db.NVarChar(Max)
+  StartTime             DateTime
+  EndTime               DateTime
+  Description           String?  @db.NVarChar(Max)
+  IsAllDay              Boolean
+  RecurrenceRule        String?  @db.NVarChar(Max)
+  RecurrenceException   String?  @db.NVarChar(Max)
+  RecurrenceID          Int?
+  Status                String?  @db.NVarChar(Max)
+  Priority              String?  @db.NVarChar(Max)
+  VorgangId             Int?
+}
+
+model SearchAttribute {
+  SearchAttributeId        Int     @id(map: "PK_SearchAttribute") @default(autoincrement())
+  Entity                   String? @db.NVarChar(Max)
+  SearchAttributeName      String? @db.NVarChar(Max)
+  ImportTemplateTemplateId Int
+  DisplayName              String? @db.NVarChar(Max)
+}
+
+model SentMails {
+  SentMailId    Int      @id(map: "PK_SentMails") @default(autoincrement())
+  MessageId     String?  @db.NVarChar(Max)
+  EmailFrom     String?  @db.NVarChar(Max)
+  EmailSubject  String?  @db.NVarChar(Max)
+  EmailTo       String?  @db.NVarChar(Max)
+  DocumentId    Int
+  DocumentType  Int
+  DocumentVault String?  @db.NVarChar(Max)
+  EmailMsg      String?  @db.NVarChar(Max)
+  Kennzeichen   String?  @db.NVarChar(Max)
+  SchadenId     Int?
+  SchadenNummer String?  @db.NVarChar(Max)
+  Uhrzeit       DateTime
+}
+
+model Stundenverrechnungssaetze {
+  StundenverrechnungssatzId Int      @id(map: "PK_Stundenverrechnungssaetze") @default(autoincrement())
+  SvsName                   String?  @db.NVarChar(Max)
+  SvsLack                   Decimal  @db.Decimal(18, 2)
+  SvsMechanik               Decimal  @db.Decimal(18, 2)
+  SvsKarosserie             Decimal  @db.Decimal(18, 2)
+  SvsLackMaterial           Decimal? @db.Decimal(18, 2)
+  SvsLackart                String?  @db.NVarChar(Max)
+  SvsEtAufschlag            Decimal  @db.Decimal(18, 2)
+  SvsVerbringung            Decimal  @db.Decimal(18, 2)
+  SvsVorgabe                Boolean
+  SvsAbweichungVonVorgabe   Decimal  @db.Decimal(18, 2)
+  SvsTypId                  Int?
+  KundeTenantItemId         Int?
+  KonzernId                 Int?
+  SvsTypName                String?  @db.NVarChar(Max)
+  DienstleisterId           Int
+}
+
+model SvsTyp {
+  SvsTypId         Int      @id(map: "PK_SvsTyp") @default(autoincrement())
+  Name             String?  @db.NVarChar(450)
+  AutarkerSvs      Boolean?
+  DekraAufAbschlag Decimal? @db.Decimal(18, 2)
+}
+
+model sysdiagrams {
+  name         String @db.NVarChar(128)
+  principal_id Int
+  diagram_id   Int    @id(map: "PK__sysdiagr__C2B05B61CE72FA26") @default(autoincrement())
+  version      Int?
+  definition   Bytes?
+}
+
+model Tankdaten {
+  TankkartenId         Int       @id(map: "PK_Tankdaten") @default(autoincrement())
+  Karte                String?   @db.NVarChar(Max)
+  Kartenzusatz         String?   @db.NVarChar(Max)
+  Kennzeichen          String?   @db.NVarChar(Max)
+  Fahrer               String?   @db.NVarChar(Max)
+  Km_Stand             Int
+  Lieferdatum          DateTime?
+  Abrechnungsdatum     DateTime?
+  Beleg_Nr             String    @db.NVarChar(Max)
+  Erfassungsart        String?   @db.NVarChar(Max)
+  Land                 String?   @db.NVarChar(Max)
+  SST                  String?   @db.NVarChar(Max)
+  PLZStation           String?   @db.NVarChar(Max)
+  Marke                String?   @db.NVarChar(Max)
+  Ort                  String?   @db.NVarChar(Max)
+  Warenart             String?   @db.NVarChar(Max)
+  Warencode            String?   @db.NVarChar(Max)
+  Warengruppe          String?   @db.NVarChar(Max)
+  Menge                Decimal   @db.Decimal(18, 2)
+  Preis                Float
+  Einheit              String?   @db.NVarChar(Max)
+  Betrag               Decimal   @db.Decimal(18, 2)
+  NachlassinclUSt      Decimal   @db.Decimal(18, 2)
+  FeeinclUSt           Decimal   @db.Decimal(18, 2)
+  WertinclUSt          Decimal   @db.Decimal(18, 2)
+  USt                  String?   @db.NVarChar(Max)
+  BetragUSt            Decimal   @db.Decimal(18, 2)
+  NachlassexclUSt      Decimal   @db.Decimal(18, 2)
+  FeeexclUSt           Decimal   @db.Decimal(18, 2)
+  WertexclUSt          Decimal   @db.Decimal(18, 2)
+  Rechnung             String?   @db.NVarChar(Max)
+  Kostenstelle         String?   @db.NVarChar(Max)
+  Autohof              Boolean?
+  Autobahntankstelle   Boolean?
+  Stra_entankstelle    Boolean?  @map("Straßentankstelle")
+  Kommentar            String?   @db.NVarChar(Max)
+  ObuId                Float?
+  FahrzeugTenantItemId Int?
+  KundeTenantItemId    Int?
+}
+
+model TeileBestellungen {
+  TeileBestellungId          Int      @id(map: "PK_TeileBestellungen") @default(autoincrement())
+  Datum                      DateTime
+  BestellNummer              String?  @db.NVarChar(Max)
+  Auftragsnummer             String?  @db.NVarChar(Max)
+  Vin                        String?  @db.NVarChar(Max)
+  KbaNummer                  String?  @db.NVarChar(Max)
+  Kennzeichen                String?  @db.NVarChar(Max)
+  Erstzulassung              DateTime
+  Hersteller                 String?  @db.NVarChar(Max)
+  Eingangsdatum              DateTime
+  Gesamtkosten               Decimal  @db.Decimal(18, 2)
+  UniqueBestellungId         String?  @db.NVarChar(Max)
+  UebergabePartsDatumUhrzeit DateTime
+  UebergebenAnParts          Boolean
+  BestellerName              String?  @db.NVarChar(Max)
+  BestellerOrt               String?  @db.NVarChar(Max)
+  BestellerStrasse           String?  @db.NVarChar(Max)
+  MfilesId                   Int?
+  MfilesType                 Int?
+}
+
+model TeileBestellungGesamt {
+  TeileBestellungGesamtId Int     @id(map: "PK_TeileBestellungGesamt") @default(autoincrement())
+  Bezeichnung             String? @db.NVarChar(Max)
+  Gesamtbetrag            Decimal @db.Decimal(18, 2)
+  TeileBestellungId       Int?
+}
+
+model TeileBestellungPositionen {
+  TeileBestellungPositionId Int     @id(map: "PK_TeileBestellungPositionen") @default(autoincrement())
+  Anzahl                    Int
+  ArtikelNummer             String? @db.NVarChar(Max)
+  Beschreibung              String? @db.NVarChar(Max)
+  Menge                     Int
+  TeileBestellungId         Int?
+  EPreis                    Decimal @db.Decimal(18, 2)
+  GPreis                    Decimal @db.Decimal(18, 2)
+}
+
+model Unfallgegner {
+  Id                   Int     @id(map: "PK_Unfallgegner") @default(autoincrement())
+  KennzeichenKfz       String? @db.NVarChar(Max)
+  KennzeichenAnhaenger String? @db.NVarChar(Max)
+  HerstellerModell     String? @db.NVarChar(Max)
+  Haltername           String? @db.NVarChar(Max)
+  Strasse              String? @db.NVarChar(Max)
+  Hausnummer           String? @db.NVarChar(Max)
+  Plz                  String? @db.NVarChar(Max)
+  Ort                  String? @db.NVarChar(Max)
+}
+
+model UploadFiles {
+  UploadFileId     Int    @id(map: "PK_UploadFiles") @default(autoincrement())
+  Filename         String @db.NVarChar(Max)
+  UploadIdentifier String @db.UniqueIdentifier
+  UserId           String @db.UniqueIdentifier
+}
+
+model UserRegistration {
+  UserRegistrationId Int    @id(map: "PK_UserRegistration") @default(autoincrement())
+  EmailAddress       String @db.NVarChar(Max)
+  UniqueCode         String @db.NVarChar(Max)
+}
+
+model ValidTenants {
+  ValidTenantId    Int @id(map: "PK_ValidTenants") @default(autoincrement())
+  TenantId         Int
+  BenutzergruppeId Int
+}
+
+model Versicherung {
+  VersicherungId                            Int       @id(map: "PK_Versicherung") @default(autoincrement())
+  InNuceKeyVersicherung                     String?   @db.NVarChar(Max)
+  Bezeichnung                               String?   @db.NVarChar(Max)
+  Beginn                                    DateTime?
+  Ende                                      DateTime?
+  Beschreibung                              String?   @db.NVarChar(Max)
+  VersicherungGesamt                        Float
+  Gruppenversicherung                       Boolean?
+  HaftpflichtGesamt                         Float
+  VsVK                                      Float?
+  SbVK                                      Float?
+  SbTK                                      Float?
+  GAPVersicherung                           Float
+  VsInsassen                                Float?
+  VsRS                                      Float?
+  VsSB                                      Float?
+  Rueckstellungspraemie                     Float?
+  VuNummer                                  Int?
+  VuName                                    String?   @db.NVarChar(Max)
+  Vertragsnummer                            String?   @db.NVarChar(Max)
+  Freigabe2500                              Boolean?
+  EmailVu                                   String?   @db.NVarChar(Max)
+  GutachterVu                               Boolean?
+  TelefonVu                                 String?   @db.NVarChar(Max)
+  WerkstattPrio                             Boolean?
+  Pickup                                    Boolean?
+  PoolPrio                                  Boolean?
+  VsKH                                      Float?
+  VsTK                                      Float?
+  VsIU                                      Float?
+  VsSchutz                                  Float?
+  SbKH                                      Float?
+  SbIU                                      Float?
+  SbSchutz                                  Float?
+  BedKH                                     String?   @db.NVarChar(Max)
+  BedVK                                     String?   @db.NVarChar(Max)
+  BedTK                                     String?   @db.NVarChar(Max)
+  BedIU                                     String?   @db.NVarChar(Max)
+  BedSchutz                                 String?   @db.NVarChar(Max)
+  KundeTenantItemId                         Int
+  FahrzeugTenantItemId                      Int?
+  VersicherungsdienstleisterDienstleisterId Int?
+  IstAktivGueltigBis                        DateTime?
+  BeitragIU                                 Float?
+  BeitragKH                                 Float?
+  BeitragSchutz                             Float?
+  BeitragTK                                 Float?
+  BeitragVK                                 Float?
+  Jahresbeitrag                             Float?
+  Zahlweise                                 String?   @db.NVarChar(Max)
+  ExternalDataField                         String?   @db.VarChar(Max)
+}
+
+model Vorgang {
+  VorgangId              Int       @id(map: "PK_Vorgang") @default(autoincrement())
+  VorgangTyp             String?   @db.NVarChar(Max)
+  Name                   String?   @db.NVarChar(Max)
+  IstAktiv               Boolean
+  GeplanteAktivierung    DateTime?
+  LetzteAktivierung      DateTime?
+  AnsprechpartnerId      Int?
+  SchadenId              Int?
+  DienstleisterId        Int?
+  FahrzeugTenantItemId   Int?
+  ActivationEventEventId Int?
+  ActivationType         String?   @db.NVarChar(Max)
+}
+
+model Vorgangsschritt {
+  VorgangsschrittId Int     @id(map: "PK_Vorgangsschritt") @default(autoincrement())
+  Reihenfolge       Int
+  SchrittTyp        String? @db.NVarChar(Max)
+  SchrittName       String? @db.NVarChar(Max)
+  SchrittWert       String? @db.NVarChar(Max)
+  VorgangId         Int?
+  External          String? @db.NVarChar(Max)
+  Internal          String? @db.NVarChar(Max)
+}
+
+model VorlagenZuordnung {
+  VorlagenZuordnungId Int     @id(map: "PK_VorlagenZuordnung") @default(autoincrement())
+  VorlagenName        String? @db.NVarChar(Max)
+  HeaderName          String? @db.NVarChar(Max)
+  FooterName          String? @db.NVarChar(Max)
+  UnterzeichnerLinks  String? @db.NVarChar(Max)
+  UnterzeichnerRechts String? @db.NVarChar(Max)
+  AnsprechpartnerId   Int
+}
+
+model Werkstatt {
+  WerkstattId        Int      @id(map: "PK_Werkstatt") @default(autoincrement())
+  Name               String   @db.NVarChar(Max)
+  Schluessel         String?  @db.NVarChar(Max)
+  IstAktiv           Boolean?
+  DekraMechanik      Float?
+  DekraKarosserie    Float?
+  DekraLack          Float?
+  SvsGeprueft        Boolean?
+  DekraMechanikHLA   Float?
+  DekraKarosserieHLA Float?
+  DekraLackHLA       Float?
+  Anmerkungen        String?  @db.NVarChar(Max)
+  NeuerVertrag       Boolean?
+  WerkstattTyp       String?  @db.NVarChar(Max)
+  Dienstleisterart   Int
+  Matchcode          String?  @db.NVarChar(Max)
+  Favorit            Int?
+}
+
+model WerkstattKundennummer {
+  WerkstattKundennummerId  Int     @id(map: "PK_WerkstattKundennummer") @default(autoincrement())
+  Lieferant                String? @db.NVarChar(Max)
+  LieferantKundennummer    String? @db.NVarChar(Max)
+  WerkstattDienstleisterId Int?
+}
+
+model WfProcessed {
+  WfProcessedId    Int     @id(map: "PK_WfProcessed") @default(autoincrement())
+  KundeId          Int?
+  FahrzeugId       Int?
+  SchadenId        Int?
+  WfRules          String? @db.NVarChar(Max)
+  ActionDatasource String? @db.NVarChar(Max)
+  RuleBereich      String? @db.NVarChar(50)
+  RuleName         String? @db.NVarChar(50)
+}
+
+model WfProperty {
+  Id        Int     @id(map: "PK_WfProperty") @default(autoincrement())
+  Name      String? @db.NVarChar(Max)
+  Value     String? @db.NVarChar(Max)
+  WfStateId Int
+}

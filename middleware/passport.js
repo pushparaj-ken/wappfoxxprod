@@ -15,6 +15,8 @@ passport.use(new JwtStrategy(jwtOptions, async (payload, done) => {
 
     if (payload.sub === "Users") {
       user = await prisma.benutzers.findUnique({ where: { BenutzerId: payload.id } });
+      userKunden = await prisma.benutzer.findUnique({ where: { UserId: user.UserId } });
+      user.KundeTenantItemId = userKunden.KundeTenantItemId
     } else {
       user = await prisma.administratorin.findUnique({ where: { Id: payload.id } });
     }

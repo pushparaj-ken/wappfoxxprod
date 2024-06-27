@@ -11,6 +11,8 @@ const errorHandler = require('./utils/ApiError');
 const AdminRouter = require('./routes/adminusers');
 const usersRouter = require('./routes/users');
 const carsRouter = require('./routes/cars');
+const VehicleRouter = require('./routes/vehicle');
+const DamageRouter = require('./routes/damage');
 const { generateSwagger, serveSwagger } = require('./swagger/swagger');
 
 var app = express();
@@ -51,6 +53,8 @@ app.use(errorHandler);
 app.use('/api/admin', AdminRouter);
 app.use('/api/users', usersRouter);
 app.use('/api/cars', carsRouter);
+app.use('/api/vehicle', VehicleRouter);
+app.use('/api/damage', DamageRouter);
 
 
 // catch 404 and forward to error handler

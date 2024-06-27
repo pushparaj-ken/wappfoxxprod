@@ -68,7 +68,7 @@ const LoginDetails = catchAsync(async (req, res, next) => {
         return next(errcode);
       }
     } else {
-      const errcode = new Error("All Field are Monitory");
+      const errcode = new Error("All Field are Mandatory");
       errcode.statusCode = 201;
       return next(errcode);
     }
@@ -151,7 +151,7 @@ const RegisterDetails = catchAsync(async (req, res, next) => {
         }
       }
     } else {
-      const errcode = new Error("All Field are Monitory");
+      const errcode = new Error("All Field are Mandatory");
       errcode.statusCode = 201;
       return next(errcode);
     }
@@ -198,7 +198,7 @@ const Password = catchAsync(async (req, res, next) => {
           return next(errcode);
         }
       } else {
-        const errcode = new Error("All Field are Monitory");
+        const errcode = new Error("All Field are Mandatory");
         errcode.statusCode = 201;
         return next(errcode);
       }
@@ -242,7 +242,7 @@ const SendEmail = catchAsync(async (req, res, next) => {
         return next(errcode);
       }
     } else {
-      const errcode = new Error("All Field are Monitory");
+      const errcode = new Error("All Field are Mandatory");
       errcode.statusCode = 201;
       return next(errcode);
     }
@@ -326,7 +326,7 @@ const VerficationCode = catchAsync(async (req, res, next) => {
         return next(errcode);
       }
     } else {
-      const errcode = new Error("All Field are Monitory");
+      const errcode = new Error("All Field are Mandatory");
       errcode.statusCode = 201;
       return next(errcode);
     }

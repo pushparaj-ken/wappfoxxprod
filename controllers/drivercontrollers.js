@@ -45,8 +45,9 @@ const ListDriver = catchAsync(async (req, res, next) => {
     let values = req.query
     let query = {}
     if (values.KundeTenantItemId !== '' && values.KundeTenantItemId !== null && values.KundeTenantItemId !== undefined) {
-      query.KundeTenantItemId = values.KundeTenantItemId
+      query.KundeTenantItemId = parseInt(values.KundeTenantItemId)
     }
+    console.log("🚀 ~ ListDriver ~ query:", query)
     let take = 20
     if (values.limit != '' && values.limit != undefined && values.limit != null) {
       take = parseInt(values.limit)
@@ -58,11 +59,19 @@ const ListDriver = catchAsync(async (req, res, next) => {
         skip = skip + (take * (parseInt(page1)));
       }
     }
-    const DriverDetails = await prisma.benutzers.findMany({
+    // const DriverDetails = await prisma.benutzers.findMany({
+    //   where: query,
+    //   skip,
+    //   take,
+    // });
+
+    const DriverDetails = await prisma.benutzer.findMany({
       where: query,
-      skip,
-      take,
+      include: {
+        Benutzers: true
+      }
     });
+    console.log("🚀 ~ ListDriver ~ DriverDetails:", DriverDetails)
     if (DriverDetails.length > 0) {
       // for (const each of DriverDetails) {
       //   const Address = await prisma.adresse.findFirst({ where: { FahrerId: each.FahrerId } })

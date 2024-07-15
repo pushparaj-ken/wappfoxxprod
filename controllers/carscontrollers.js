@@ -66,8 +66,30 @@ const CarsList = catchAsync(async (req, res, next) => {
   }
 });
 
-
+const CarkmStand = catchAsync(async (req, res, next) => {
+  try {
+    const values = req.body
+    if (values.carid && values.carid.trim() !== '' && values.carno && values.carno.trim() !== '') {
+      res.send({
+        success: true,
+        code: 200,
+        status: "Data Successfully Added",
+        timestamp: new Date(),
+      });
+    } else {
+      const errcode = new Error("All Field are Monitory");
+      errcode.statusCode = 201;
+      return next(errcode);
+    }
+  } catch (error) {
+    console.log("TCL: getBankverbindungen -> error", error)
+    const errcode = new Error(error.stack);
+    errcode.statusCode = 201;
+    return next(errcode);
+  }
+});
 
 module.exports = {
   CarsList,
+  CarkmStand
 }

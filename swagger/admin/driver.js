@@ -101,6 +101,18 @@
  *           type: string
  *         required: false
  *         description: Filter By customers 
+ *       - in: query
+ *         name: limit
+ *         schema:
+ *           type: number
+ *         required: false
+ *         description: No of records 
+ *       - in: query
+ *         name: page
+ *         schema:
+ *           type: number
+ *         required: false
+ *         description: page no
  *     responses:
  *       200:
  *         description: Success

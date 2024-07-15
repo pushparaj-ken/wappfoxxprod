@@ -35,7 +35,7 @@
 
 /**
  * @swagger
- * /api/customers/add:
+ * /api/admin/customers/add:
  *   post:
  *     summary: Add Customers
  *     tags: [Customers]
@@ -51,7 +51,7 @@
  */
 /**
  * @swagger
- * /api/customers/list:
+ * /api/admin/customers/list:
  *   get:
  *     summary: List Customers
  *     tags: [Customers]
@@ -68,13 +68,25 @@
  *           type: string
  *         required: false
  *         description: Filter customers by Kundencode
+ *       - in: query
+ *         name: limit
+ *         schema:
+ *           type: number
+ *         required: false
+ *         description: No of records 
+ *       - in: query
+ *         name: page
+ *         schema:
+ *           type: number
+ *         required: false
+ *         description: page no
  *     responses:
  *       200:
  *         description: Success
  */
 /**
  * @swagger
- * /api/customers/update/{id}:
+ * /api/admin/customers/update/{id}:
  *   put:
  *     summary: Update Customers
  *     tags: [Customers]
@@ -97,7 +109,7 @@
  */
 /**
  * @swagger
- * /api/customers/delete/{id}:
+ * /api/admin/customers/delete/{id}:
  *   delete:
  *     summary: Delete Customers
  *     tags: [Customers]

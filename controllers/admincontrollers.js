@@ -104,7 +104,7 @@ const DashboardDetails = catchAsync(async (req, res, next) => {
   try {
     let values = req.query
     const CustomersDetails = await prisma.kunden.findMany();
-    const DriverDetails = await prisma.Benutzer.findMany();
+    const DriverDetails = await prisma.benutzer.findMany();
     let Data = {
       CustomerCount: CustomersDetails.length,
       DriverCount: DriverDetails.length
@@ -141,7 +141,7 @@ const SendEmail = catchAsync(async (req, res, next) => {
           EmailCode: code
         }
         const where = { EMailAdresse: values.EMailAdresse }
-        await prisma.Benutzer.update({ data, where });
+        await prisma.benutzers.update({ data, where });
         res.send({
           success: true,
           code: 200,
@@ -170,13 +170,13 @@ const VerifyEmail = catchAsync(async (req, res, next) => {
   try {
     const values = req.body
     if (values.EMailAdresse != '' && values.EMailAdresse != null && values.EMailAdresse != undefined && values.code !== '' && values.code !== null && values.code !== undefined) {
-      const existingRecord = await prisma.Benutzer.findUnique({ where: { EMailAdresse: values.EMailAdresse } });
+      const existingRecord = await prisma.benutzers.findUnique({ where: { EMailAdresse: values.EMailAdresse } });
       if (existingRecord) {
         if (existingRecord.EmailCode === values.code) {
-          let Data = {
+          let data = {
             IsEmail: true
           }
-          await existingRecord.update(Data);
+          await prisma.benutzers.update({ data, where: { EMailAdresse: values.EMailAdresse } });
           res.send({
             success: true,
             code: 200,

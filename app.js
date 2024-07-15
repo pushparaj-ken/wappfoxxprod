@@ -13,6 +13,9 @@ const usersRouter = require('./routes/users');
 const carsRouter = require('./routes/cars');
 const VehicleRouter = require('./routes/vehicle');
 const DamageRouter = require('./routes/damage');
+const customersRouter = require('./routes/customers');
+const driverRouter = require('./routes/driver');
+
 const { generateSwagger, serveSwagger } = require('./swagger/swagger');
 
 var app = express();
@@ -29,7 +32,7 @@ const swaggerSpecAdmin = generateSwagger('Consense Admin', '1.0.0', routesadmin)
 // Serve Swagger documentation
 serveSwagger(app, swaggerSpec, '/api-docs');
 
-serveSwagger(app, swaggerSpecAdmin, '/admin/api-docs');
+serveSwagger(app, swaggerSpecAdmin, '/api/admin/docs');
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -55,6 +58,8 @@ app.use('/api/users', usersRouter);
 app.use('/api/cars', carsRouter);
 app.use('/api/vehicle', VehicleRouter);
 app.use('/api/damage', DamageRouter);
+app.use('/api/admin/customers', customersRouter);
+app.use('/api/admin/driver', driverRouter);
 
 
 // catch 404 and forward to error handler

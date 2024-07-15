@@ -29,6 +29,18 @@
  *         status:
  *           type: string
  *           example: aktiv
+ *     CarsKmBody:
+ *       type: object
+ *       required:
+ *         - carid
+ *         - carno          
+ *       properties:
+ *         carid:
+ *           type: string
+ *           example: 2321adada
+ *         carno:
+ *           type: string
+ *           example: DC25W
  *     CarsResponse:
  *       type: object
  *       properties:
@@ -45,6 +57,25 @@
  *     tags: [Cars]
  *     security:
  *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: Success
+ */
+
+/**
+ * @swagger
+ * /api/cars/carkmstand:
+ *   post:
+ *     summary: Cars KM Stand
+ *     tags: [Cars]
+ *     security:
+ *       - bearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/CarsKmBody'
  *     responses:
  *       200:
  *         description: Success

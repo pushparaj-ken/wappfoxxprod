@@ -4,6 +4,7 @@ const _ = require('lodash');
 const emailError = require('../services/email')
 const prisma = require('../db/prisma-client/prisma.service');
 const bcrypt = require("bcryptjs");
+const imageUpload = require("../services/imageupload");
 
 
 const LoginDetails = catchAsync(async (req, res, next) => {
@@ -416,6 +417,40 @@ const UpdateProfileDetails = catchAsync(async (req, res, next) => {
   }
 });
 
+
+const CommonImageUpload = catchAsync(async (req, res) => {
+  let values = req.body;
+  let files = req.files;
+
+  if (files.image != '' && files.image != null && files.image != undefined
+
+  ) {
+
+    let image_new = "";
+    if (files.image) {
+      const { buffer, originalname } = files.image[0];
+      let image = await imageUpload.upload(buffer, originalname);
+      image_new = image.Location;
+    } else {
+      image_new = image_new;
+    }
+    res.send({
+      success: true,
+      code: 200,
+      Image_url: image_new,
+      Status: "Images Saved Success",
+    });
+
+  } else {
+    res.send({
+      code: 201,
+      success: false,
+      status: "All Fields are Mandatory",
+      timestamp: new Date()
+    });
+  }
+});
+
 module.exports = {
   LoginDetails,
   RegisterDetails,
@@ -424,5 +459,6 @@ module.exports = {
   Password,
   ProfileDetails,
   UpdateProfileDetails,
-  VerifyEmail
+  VerifyEmail,
+  CommonImageUpload
 }

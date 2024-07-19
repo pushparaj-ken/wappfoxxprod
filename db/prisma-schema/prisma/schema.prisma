@@ -1988,6 +1988,96 @@ model Schaden {
   Kostenvoranschlag                     Kostenvoranschlag[]
 }
 
+
+model Damage {
+  id                                    Int                 @id @default(autoincrement())
+  damageNo                              String                 
+  damageType                            String
+  damageGroup                           String
+  couseofDamage                         String
+  damageStatus                          String
+  customerId                            Int
+  vehicleId                             Int
+  vehicleNo                             String
+  damageDescription                     String
+  damageDate                            DateTime
+  damageReportDate                      DateTime
+  street                                String
+  pincode                               Int
+  city                                  String
+  workshopInfo                          String
+  country                               String
+  Mileage                               String
+  tripType                              String
+  isAlcohol                             String
+  party                                 String
+  police                                String
+  parkinglocation                       parkinglocation?
+  documents                             Documents?
+  partydetails                          partyDetails?
+  policedetails                         policeDetails?
+  createdAt                             DateTime              @default(now())
+  updatedAt                             DateTime              @updatedAt
+}
+
+model parkinglocation {
+  id                  Int          @id @default(autoincrement())
+  street              String
+  pincode             Int
+  city                String
+  workshopInfo        String
+  country             String
+  damageId            Int          @unique
+  damage              Damage       @relation(fields: [damageId], references: [id], onDelete: Cascade)
+  createdAt           DateTime     @default(now())
+  updatedAt           DateTime     @updatedAt
+}
+
+model Documents {
+  id                    Int            @id @default(autoincrement())
+  name                  String         
+  categoryname          String         
+  partyname             String         
+  image                 String   
+  categoryimage         String   
+  partyinvoleimage      String   
+  damageId              Int            @unique 
+  damage                Damage         @relation(fields: [damageId], references: [id])
+  createdAt             DateTime       @default(now())
+  updatedAt             DateTime       @updatedAt
+}
+
+
+model partyDetails {
+  id                  Int          @id @default(autoincrement())
+  Name                String
+  Address             String
+  Company             String
+  Email               String
+  Telephone           String
+  Insurance           String
+  Insurancenumber     String
+  damageId            Int          @unique
+  damage              Damage       @relation(fields: [damageId], references: [id], onDelete: Cascade)
+  createdAt           DateTime     @default(now())
+  updatedAt           DateTime     @updatedAt
+}
+
+
+model policeDetails {
+  id                  Int          @id @default(autoincrement())
+  InvestigationfileNo String
+  Diarynumber         String
+  Department          String
+  street              String
+  pincode             String
+  city                String
+  damageId            Int          @unique
+  damage              Damage       @relation(fields: [damageId], references: [id], onDelete: Cascade)
+  createdAt           DateTime     @default(now())
+  updatedAt           DateTime     @updatedAt
+}
+
 model SchadenBeteiligter {
   Id                     Int     @id(map: "PK_SchadenBeteiligter") @default(autoincrement())
   AdressTyp              String  @db.NVarChar(Max)

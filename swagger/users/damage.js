@@ -11,79 +11,147 @@
  * components:
  *   schemas:
  *     DamageRequestBody:
- *       type: object
- *       required:
- *         - Schadenart
- *         - Schadenstatus
- *         - FahrzeugTenantItemId
- *         - Schadengruppe
- *         - Schadenursache
- *         - Kennzeichen 
- *         - Schadenschilderung
- *         - Schadendatum
- *         - Schadenmeldedatum  
- *         - Strasse
- *         - Plz
- *         - Ort  
- *         - WerkstattInfo            
- *         - Land            
+ *       type: object  
  *       properties:
- *         Schadenart:
+ *         damageType:
  *           type: string
  *           example: Person
  *           description: Type Of Damage
- *         Schadengruppe:
+ *         damageGroup:
  *           type: string
  *           example: "Glass Break RockFall" 
  *           description: Damage Group
- *         Schadenursache:
+ *         couseofDamage:
  *           type: string
  *           example: RockFall in field of vision
  *           description: Cause Of Damage
- *         Schadenstatus:
+ *         damageStatus:
  *           type: string
  *           example: "Recorded"
  *           description: Damage Status
- *         FahrzeugTenantItemId:
+ *         vehicleId:
  *           type: number
- *           example: 1
+ *           example: 2
  *           description: Vehicle Id
- *         Kennzeichen:
+ *         vehicleNo:
  *           type: string
  *           example: TN15U7396
  *           description: Vehicle Number
- *         Schadenschilderung:
+ *         damageDescription:
  *           type: string
- *           example: "Damage Description"
  *           description: Description of damage
- *         Schadendatum:
+ *         damageDate:
  *           type: date
  *           example: "2024-01-03 13:12:01"
  *           description: Date/time of Damage
- *         Schadenmeldedatum:
+ *         damageReportDate:
  *           type: date
  *           example: "2024-01-04 13:16:01"
  *           description: Date/time of Claim of Notification
- *         Strasse:
+ *         street:
  *           type: string
- *           example: Address
  *           description: Street & House No
- *         Plz:
+ *         pincode:
  *           type: string
- *           example: 600015
  *           description: Pincode
- *         Ort:
+ *         city:
  *           type: string
- *           example: Chennai
  *           description: Location
- *         WerkstattInfo:
+ *         workshopInfo:
  *           type: String
- *           example: Information
  *           description: Further Information
- *         Land:
+ *         country:
+ *           type: string
+ *           description: Country
+ *         Mileage:
+ *           type: string
+ *           description: Mileage
+ *         tripType:
+ *           type: string
+ *           description: Business trip/Private trip
+ *         isAlcohol:
+ *           type: string
+ *           description: Yes/No
+ *         party:
+ *           type: string
+ *           description: Yes/No
+ *         police:
+ *           type: string
+ *           description: Yes/No
+ *         partyName:
+ *           type: string
+ *           description: party Name
+ *         partyAddress:
+ *           type: string
+ *           description: party Address
+ *         partyCompany:
+ *           type: string
+ *           description: party Company
+ *         partyEmail:
+ *           type: string
+ *           description: party Email
+ *         partyTelephone:
+ *           type: string
+ *           description: party Telephone
+ *         partyInsurance:
+ *           type: string
+ *           description: party Insurance
+ *         partyInsurancenumber:
+ *           type: string
+ *           description: party Insurancenumber
+ *         PoliceInvestigationfileN:
+ *           type: string
+ *           description: Police InvestigationfileN
+ *         PoliceDiarynumber:
+ *           type: string
+ *           description: Police Diarynumber
+ *         PoliceDepartment:
+ *           type: string
+ *           description: Police Department
+ *         PoliceStreet:
+ *           type: string
+ *           description: Police Street
+ *         Policepincode:
+ *           type: string
+ *           description: Police pincode
+ *         Policecity:
+ *           type: string
+ *           description: Police city
+ *         parkingstreet:
+ *           type: string
+ *           description: parking street
+ *         parkingpincode:
+ *           type: string
+ *           description: parking pincode
+ *         parkingcity:
+ *           type: string
+ *           description: parking city
+ *         parkingworkshopInfo:
+ *           type: string
+ *           description: parking workshopInfo
+ *         parkingcountry:
+ *           type: string
+ *           description: parking country
+ *         documentsname:
+ *           type: string
+ *           description: documents name
+ *         categoryname:
  *           type: string
  *           example: India
- *           description: Country
+ *           description: category name
+ *         partyname:
+ *           type: string
+ *           example: India
+ *           description: party name
+ *         categoryimage:
+ *           type: string
+ *           format: binary
+ *         partyinvoleimage:
+ *           type: string
+ *           format: binary
+ *         image:
+ *           type: string
+ *           format: binary
  *     DamageResponse:
  *       type: object
  *       properties:
@@ -102,9 +170,29 @@
  *     requestBody:
  *       required: true
  *       content:
- *         application/json:
+ *         multipart/form-data:
  *           schema:
  *             $ref: '#/components/schemas/DamageRequestBody'
+ *     responses:
+ *       200:
+ *         description: Success
+ */
+
+/**
+ * @swagger
+ * /api/damage/list:
+ *   get:
+ *     summary: Damage List
+ *     tags: [Damage]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: query
+ *         name: damageNo
+ *         schema:
+ *           type: string
+ *         required: false
+ *         description: Filter by damageNo 
  *     responses:
  *       200:
  *         description: Success

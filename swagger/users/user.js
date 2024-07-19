@@ -249,3 +249,24 @@
  *       200:
  *         description: Email verification successful
  */
+
+/**
+ * @swagger
+ * /api/users/imageupload:
+ *   post:
+ *     summary: Common Image upload
+ *     tags: [Users]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         multipart/form-data:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               image:
+ *                   type: string
+ *                   format: binary
+ *     responses:
+ *       200:
+ *         description: Success
+ */

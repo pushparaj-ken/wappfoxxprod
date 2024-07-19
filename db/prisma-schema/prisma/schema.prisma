@@ -1991,6 +1991,7 @@ model Schaden {
 
 model Damage {
   id                                    Int                 @id @default(autoincrement())
+  userId                                Int
   damageNo                              String                 
   damageType                            String
   damageGroup                           String

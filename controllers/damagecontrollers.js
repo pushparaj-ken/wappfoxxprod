@@ -11,6 +11,7 @@ const AddDamage = catchAsync(async (req, res, next) => {
     let DamageNumber = Math.floor(10000000 + Math.random() * 90000000).toString();
     if (values) {
       const Damage = {
+        userId: users.BenutzerId,
         damageDate: new Date(values.damageDate),
         damageReportDate: new Date(values.damageReportDate),
         customerId: users.KundeTenantItemId,
@@ -125,9 +126,10 @@ const DamageDetails = catchAsync(async (req, res, next) => {
     let where = {}
     let query = {}
     if (values.damageNo != null && values.damageNo != undefined && values.damageNo != '') {
-      where = { damageNo: values.damageNo }
-      query = { where, include: { parkinglocation: true, documents: true, policedetails: true, partydetails: true } }
+      where.damageNo = values.damageNo
     }
+    where.userId = users.BenutzerId
+    query = { where, include: { parkinglocation: true, documents: true, policedetails: true, partydetails: true } }
     const damageDetails = await prisma.damage.findMany(query)
     if (damageDetails.length > 0) {
       res.send({

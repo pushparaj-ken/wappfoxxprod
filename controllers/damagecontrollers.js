@@ -126,7 +126,7 @@ const DamageDetails = catchAsync(async (req, res, next) => {
     let query = {}
     if (values.damageNo != null && values.damageNo != undefined && values.damageNo != '') {
       where = { damageNo: values.damageNo }
-      query = { where, include: { parkinglocation: true, documents: true, policeDetails: true, partyDetails: true } }
+      query = { where, include: { parkinglocation: true, documents: true, policedetails: true, partydetails: true } }
     }
     const damageDetails = await prisma.damage.findMany(query)
     if (damageDetails.length > 0) {

@@ -150,3 +150,30 @@
  *       200:
  *         description: Email verification successful
  */
+
+
+/**
+ * @swagger
+ * /api/admin/damagelist:
+ *   get:
+ *     summary: Damage List
+ *     tags: [Admin]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: query
+ *         name: damageNo
+ *         schema:
+ *           type: string
+ *         required: false
+ *         description: Filter by damageNo 
+ *       - in: query
+ *         name: userId
+ *         schema:
+ *           type: string
+ *         required: false
+ *         description: Filter by user 
+ *     responses:
+ *       200:
+ *         description: Success
+ */

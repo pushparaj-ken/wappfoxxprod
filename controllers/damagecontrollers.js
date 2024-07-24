@@ -32,7 +32,8 @@ const AddDamage = catchAsync(async (req, res, next) => {
         tripType: values.tripType,
         isAlcohol: values.isAlcohol,
         party: values.party,
-        police: values.police
+        police: values.police,
+        parts: values.parts,
       }
       await prisma.damage.create({ data: Damage }).then(async (Result) => {
         if (values.party === 'Yes') {
@@ -59,6 +60,47 @@ const AddDamage = catchAsync(async (req, res, next) => {
             city: values.Policecity,
           }
           await prisma.policeDetails.create({ data: Police });
+        }
+        if (values.parts === 'Yes') {
+          const Parts = {
+            damageId: Result.id,
+            tire_front_left: parseInt(values.tire_front_left),
+            headlight_front_left: parseInt(values.headlight_front_left),
+            rim_front_left: parseInt(values.rim_front_left),
+            bumper_front_left: parseInt(values.bumper_front_left),
+            headlight_front_right: parseInt(values.headlight_front_right),
+            rim_front_right: parseInt(values.rim_front_right),
+            tire_front_right: parseInt(values.tire_front_right),
+            fender_left: parseInt(values.fender_left),
+            side_mirror_left: parseInt(values.side_mirror_left),
+            door_front_left: parseInt(values.door_front_left),
+            sill_left: parseInt(values.sill_left),
+            door_rear_left: parseInt(values.door_rear_left),
+            side_window_rear_left: parseInt(values.side_window_rear_left),
+            sidepanel_rear_left: parseInt(values.sidepanel_rear_left),
+            side_window_front_left: parseInt(values.side_window_front_left),
+            engine_hood: parseInt(values.engine_hood),
+            windshield: parseInt(values.windshield),
+            roof: parseInt(values.roof),
+            window_rear: parseInt(values.window_rear),
+            tailgate: parseInt(values.tailgate),
+            side_window_front_right: parseInt(values.side_window_front_right),
+            fender_right: parseInt(values.fender_right),
+            side_mirror_right: parseInt(values.side_mirror_right),
+            door_front_right: parseInt(values.door_front_right),
+            sill_right: parseInt(values.sill_right),
+            door_rear_right: parseInt(values.door_rear_right),
+            side_window_rear_right: parseInt(values.side_window_rear_right),
+            side_panel_rear_right: parseInt(values.side_panel_rear_right),
+            tire_rear_left: parseInt(values.tire_rear_left),
+            headlight_rear_left: parseInt(values.headlight_rear_left),
+            rim_rear_left: parseInt(values.rim_rear_left),
+            bumper_rear_left: parseInt(values.bumper_rear_left),
+            headlight_rear_right: parseInt(values.headlight_rear_right),
+            rim_rear_right: parseInt(values.rim_rear_right),
+            tire_rear_right: parseInt(values.tire_rear_right),
+          }
+          await prisma.damageVehicleParts.create({ data: Parts });
         }
         const parkingLocation = {
           damageId: Result.id,

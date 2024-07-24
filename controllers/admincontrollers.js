@@ -208,10 +208,48 @@ const VerifyEmail = catchAsync(async (req, res, next) => {
   }
 });
 
+const DamageDetails = catchAsync(async (req, res, next) => {
+  try {
+    const users = req.user;
+    const values = req.query;
+    let where = {}
+    let query = {}
+    if (values.damageNo != null && values.damageNo != undefined && values.damageNo != '') {
+      where.damageNo = values.damageNo
+    }
+    if (values.userId != null && values.userId != undefined && values.userId != '') {
+      where.userId = values.userId
+    }
+
+    query = { where, include: { parkinglocation: true, documents: true, policedetails: true, partydetails: true, damagevehicleparts: true } }
+    const damageDetails = await prisma.damage.findMany(query)
+    if (damageDetails.length > 0) {
+      res.send({
+        success: true,
+        code: 200,
+        status: "Data Retrieved Success",
+        Data: damageDetails,
+        timestamp: new Date(),
+      });
+    } else {
+      const errcode = new Error("No Data exists.");
+      errcode.statusCode = 201;
+      return next(errcode);
+    }
+  } catch (error) {
+    console.log("TCL: getBankverbindungen -> error", error)
+    const errcode = new Error(error.stack);
+    errcode.statusCode = 201;
+    return next(errcode);
+  }
+});
+
+
 module.exports = {
   LoginDetails,
   RegisterDetails,
   DashboardDetails,
   SendEmail,
-  VerifyEmail
+  VerifyEmail,
+  DamageDetails,
 }

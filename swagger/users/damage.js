@@ -78,6 +78,9 @@
  *         police:
  *           type: string
  *           description: Yes/No
+ *         parts:
+ *           type: string
+ *           description: Yes/No
  *         partyName:
  *           type: string
  *           description: party Name
@@ -152,6 +155,111 @@
  *         image:
  *           type: string
  *           format: binary
+ *         tire_front_left:
+ *           type: string
+ *           example: 0
+ *         headlight_front_left:
+ *           type: string
+ *           example: 0
+ *         rim_front_left:
+ *           type: string
+ *           example: 0
+ *         bumper_front_left:
+ *           type: string
+ *           example: 0
+ *         headlight_front_right:
+ *           type: string
+ *           example: 0
+ *         rim_front_right:
+ *           type: string
+ *           example: 0
+ *         tire_front_right:
+ *           type: string
+ *           example: 0
+ *         fender_left:
+ *           type: string
+ *           example: 0
+ *         side_mirror_left:
+ *           type: string
+ *           example: 0
+ *         door_front_left:
+ *           type: string
+ *           example: 0
+ *         sill_left:
+ *           type: string
+ *           example: 0
+ *         door_rear_left:
+ *           type: string
+ *           example: 0
+ *         side_window_rear_left:
+ *           type: string
+ *           example: 0
+ *         sidepanel_rear_left:
+ *           type: string
+ *           example: 0
+ *         side_window_front_left:
+ *           type: string
+ *           example: 0
+ *         engine_hood:
+ *           type: string
+ *           example: 0
+ *         windshield:
+ *           type: string
+ *           example: 0
+ *         roof:
+ *           type: string
+ *           example: 0
+ *         window_rear:
+ *           type: string
+ *           example: 0
+ *         tailgate:
+ *           type: string
+ *           example: 0
+ *         side_window_front_right:
+ *           type: string
+ *           example: 0
+ *         fender_right:
+ *           type: string
+ *           example: 0
+ *         side_mirror_right:
+ *           type: string
+ *           example: 0
+ *         door_front_right:
+ *           type: string
+ *           example: 0
+ *         sill_right:
+ *           type: string
+ *           example: 0
+ *         door_rear_right:
+ *           type: string
+ *           example: 0
+ *         side_window_rear_right:
+ *           type: string
+ *           example: 0
+ *         side_panel_rear_right:
+ *           type: string
+ *           example: 0
+ *         tire_rear_left:
+ *           type: string
+ *           example: 0
+ *         headlight_rear_left:
+ *           type: string
+ *           example: 0
+ *         rim_rear_left:
+ *           type: string
+ *           example: 0
+ *         bumper_rear_left:
+ *           type: string
+ *           example: 0
+ *         headlight_rear_right:
+ *           type: string
+ *           example: 0
+ *         rim_rear_right:
+ *           type: string
+ *           example: 0
+ *         tire_rear_right:
+ *           type: string
+ *           example: 0
  *     DamageResponse:
  *       type: object
  *       properties:

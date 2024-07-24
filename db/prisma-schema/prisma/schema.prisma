@@ -182,7 +182,7 @@ model Bankverbindungen {
 }
 
 model Benutzer {
-  UserId             Int       @id(map: "PK_Benutzer") @default(autoincrement())
+  UserId             Int       @id @default(autoincrement())
   ObjectId           String?   @default(cuid()) @db.NVarChar(Max)
   Kundenname         String?   @db.NVarChar(Max)
   IstAktiv           Boolean?
@@ -1862,13 +1862,13 @@ model RentalConfirmedCreates {
 
 model Schaden {
   Id                                    Int                 @id(map: "PK_Schaden") @default(autoincrement())
-  SchadenNummer                         String              @db.NVarChar(450)
+  SchadenNummer                         String?              @db.NVarChar(450)
   Schadendatum                          DateTime?
   Schadenmeldedatum                     DateTime?
-  Schadenart                            String              @db.NVarChar(Max)
-  Schadenstatus                         String              @db.NVarChar(Max)
-  Schadensort                           String              @db.NVarChar(Max)
-  Fahrzeugstatus                        String              @db.NVarChar(Max)
+  Schadenart                            String?              @db.NVarChar(Max)
+  Schadenstatus                         String?              @db.NVarChar(Max)
+  Schadensort                           String?              @db.NVarChar(Max)
+  Fahrzeugstatus                        String?              @db.NVarChar(Max)
   SchadennummernVersicherer             String?             @db.NVarChar(Max)
   Personenschaden                       Boolean?
   Vertragsnummer                        String?             @db.NVarChar(Max)
@@ -1886,7 +1886,7 @@ model Schaden {
   FahrerKlassen                         String?             @db.NVarChar(Max)
   FahrerSeit                            DateTime?
   LaufleistungInKm                      Int
-  Schadengruppe                         String              @db.NVarChar(Max)
+  Schadengruppe                         String?              @db.NVarChar(Max)
   Schadenursache                        String?             @db.NVarChar(Max)
   Alkohol                               Boolean
   PrivatDienstfahrt                     String?             @db.NVarChar(Max)
@@ -1914,36 +1914,36 @@ model Schaden {
   Abholung                              Boolean?
   WunschTermin                          DateTime?
   WerkstattTermin                       DateTime?
-  Abholadresse                          String              @db.NVarChar(Max)
+  Abholadresse                          String?              @db.NVarChar(Max)
   ReparaturAustausch                    String?             @db.NVarChar(Max)
-  Besichtigungsort                      String              @db.NVarChar(Max)
-  GutachtenTyp                          String              @db.NVarChar(Max)
+  Besichtigungsort                      String?              @db.NVarChar(Max)
+  GutachtenTyp                          String?              @db.NVarChar(Max)
   Gutachter                             String?             @db.NVarChar(Max)
   Gutachterfestlegung                   Boolean
   GutachterfestlegungText               String?             @db.NVarChar(Max)
   GkkBilder                             Boolean
   GutachterZusatzInfo                   String?             @db.NVarChar(Max)
-  Reparaturkosten                       Decimal             @db.Decimal(18, 2)
-  Restwert                              Decimal             @db.Decimal(18, 2)
-  GutschriftVersicherung                Decimal             @db.Decimal(18, 2)
-  Eigenanteil                           Decimal             @db.Decimal(18, 2)
-  SummeGutachten                        Decimal             @db.Decimal(18, 2)
-  SummeKostenvoranschlag                Decimal             @db.Decimal(18, 2)
-  KostenKarosserieInstandhaltung        Decimal             @db.Decimal(18, 2)
-  Mietwagenkosten                       Decimal             @db.Decimal(18, 2)
-  KostenWindschutzscheibeInstandhaltung Decimal             @db.Decimal(18, 2)
-  Gutachterkosten                       Decimal             @db.Decimal(18, 2)
-  Wertminderung                         Decimal             @db.Decimal(18, 2)
-  Wiederbeschaffungswert                Decimal             @db.Decimal(18, 2)
+  Reparaturkosten                       Decimal?            @db.Decimal(18, 2)
+  Restwert                              Decimal?            @db.Decimal(18, 2)
+  GutschriftVersicherung                Decimal?            @db.Decimal(18, 2)
+  Eigenanteil                           Decimal?            @db.Decimal(18, 2)
+  SummeGutachten                        Decimal?            @db.Decimal(18, 2)
+  SummeKostenvoranschlag                Decimal?            @db.Decimal(18, 2)
+  KostenKarosserieInstandhaltung        Decimal?            @db.Decimal(18, 2)
+  Mietwagenkosten                       Decimal?            @db.Decimal(18, 2)
+  KostenWindschutzscheibeInstandhaltung Decimal?            @db.Decimal(18, 2)
+  Gutachterkosten                       Decimal?            @db.Decimal(18, 2)
+  Wertminderung                          Decimal?            @db.Decimal(18, 2)
+  Wiederbeschaffungswert                Decimal?            @db.Decimal(18, 2)
   NutzungsausfallInTagen                Int
-  NutzungsausfallProTag                 Decimal             @db.Decimal(18, 2)
-  NutzungsausfallGesamt                 Decimal             @db.Decimal(18, 2)
+  NutzungsausfallProTag                 Decimal?            @db.Decimal(18, 2)
+  NutzungsausfallGesamt                 Decimal?            @db.Decimal(18, 2)
   Nutzungsausfallgruppe                 String?             @db.NVarChar(Max)
-  Anlieferungsort                       String              @db.NVarChar(Max)
+  Anlieferungsort                       String?              @db.NVarChar(Max)
   Steuerungsvorgabe                     String?             @db.NVarChar(Max)
   Vermieter                             String?             @db.NVarChar(Max)
   Anlieferungszeitpunkt                 DateTime?
-  MietwagenTyp                          String              @db.NVarChar(Max)
+  MietwagenTyp                          String?              @db.NVarChar(Max)
   RueckgabeZeitpunkt                    DateTime?
   Reservierungsnummer                   String?             @db.NVarChar(Max)
   Kommentar                             String?             @db.NVarChar(Max)
@@ -1960,7 +1960,7 @@ model Schaden {
   Kostenstelle2GueltigAb                DateTime?
   Rueckgabeort                          String?             @db.VarChar(Max)
   GutachterBesichtigungstermin          DateTime?
-  SchadenstatusBegruendung              String              @db.NVarChar(Max)
+  SchadenstatusBegruendung              String?              @db.NVarChar(Max)
   Bemerkung1                            String?             @db.NVarChar(Max)
   Bemerkung2                            String?             @db.NVarChar(Max)
   BilderErhalten                        Boolean?
@@ -1977,7 +1977,7 @@ model Schaden {
   Email                                 String?             @db.NVarChar(Max)
   Mobil                                 String?             @db.NVarChar(Max)
   Ort                                   String?             @db.NVarChar(Max)
-  Plz                                   String?             @db.NVarChar(Max)
+  Plz                                   Int?
   Land                                  String?             @db.NVarChar(Max)
   Strasse                               String?             @db.NVarChar(Max)
   Telefon                               String?             @db.NVarChar(Max)
@@ -1992,28 +1992,28 @@ model Schaden {
 model Damage {
   id                                    Int                 @id @default(autoincrement())
   userId                                Int
-  damageNo                              String                 
-  damageType                            String
-  damageGroup                           String
-  couseofDamage                         String
-  damageStatus                          String
+  damageNo                              String?                  
+  damageType                            String? 
+  damageGroup                           String? 
+  couseofDamage                         String? 
+  damageStatus                          String? 
   customerId                            Int
   vehicleId                             Int
-  vehicleNo                             String
-  damageDescription                     String
+  vehicleNo                             String? 
+  damageDescription                     String? 
   damageDate                            DateTime
   damageReportDate                      DateTime
-  street                                String
+  street                                String? 
   pincode                               Int
-  city                                  String
-  workshopInfo                          String
-  country                               String
-  Mileage                               String
-  tripType                              String
-  isAlcohol                             String
-  party                                 String
-  police                                String
-  parts                                 String
+  city                                  String? 
+  workshopInfo                          String? 
+  country                               String? 
+  Mileage                               String? 
+  tripType                              String? 
+  isAlcohol                             String? 
+  party                                 String? 
+  police                                String? 
+  parts                                 String? 
   parkinglocation                       parkinglocation?
   documents                             Documents?
   partydetails                          partyDetails?
@@ -2025,11 +2025,11 @@ model Damage {
 
 model parkinglocation {
   id                  Int          @id @default(autoincrement())
-  street              String
+  street              String? 
   pincode             Int
-  city                String
-  workshopInfo        String
-  country             String
+  city                String? 
+  workshopInfo        String? 
+  country             String? 
   damageId            Int          @unique
   damage              Damage       @relation(fields: [damageId], references: [id], onDelete: Cascade)
   createdAt           DateTime     @default(now())
@@ -2038,12 +2038,12 @@ model parkinglocation {
 
 model Documents {
   id                    Int            @id @default(autoincrement())
-  name                  String         
-  categoryname          String         
-  partyname             String         
-  image                 String   
-  categoryimage         String   
-  partyinvoleimage      String   
+  name                  String?          
+  categoryname          String?          
+  partyname             String?          
+  image                 String?    
+  categoryimage         String?    
+  partyinvoleimage      String?    
   damageId              Int            @unique 
   damage                Damage         @relation(fields: [damageId], references: [id])
   createdAt             DateTime       @default(now())
@@ -2053,13 +2053,13 @@ model Documents {
 
 model partyDetails {
   id                  Int          @id @default(autoincrement())
-  Name                String
-  Address             String
-  Company             String
-  Email               String
-  Telephone           String
-  Insurance           String
-  Insurancenumber     String
+  Name                String? 
+  Address             String? 
+  Company             String? 
+  Email               String? 
+  Telephone           String? 
+  Insurance           String? 
+  Insurancenumber     String? 
   damageId            Int          @unique
   damage              Damage       @relation(fields: [damageId], references: [id], onDelete: Cascade)
   createdAt           DateTime     @default(now())
@@ -2069,12 +2069,12 @@ model partyDetails {
 
 model policeDetails {
   id                  Int          @id @default(autoincrement())
-  InvestigationfileNo String
-  Diarynumber         String
-  Department          String
-  street              String
-  pincode             String
-  city                String
+  InvestigationfileNo String? 
+  Diarynumber         String? 
+  Department          String? 
+  street              String? 
+  pincode             Int? 
+  city                String? 
   damageId            Int          @unique
   damage              Damage       @relation(fields: [damageId], references: [id], onDelete: Cascade)
   createdAt           DateTime     @default(now())

@@ -50,15 +50,17 @@ const AddDamage = catchAsync(async (req, res, next) => {
           await prisma.partyDetails.create({ data: Party });
         }
         if (values.police === 'Yes') {
+          console.log("🚀 ~ awaitprisma.damage.create ~ Police:", values.Policepincode)
           const Police = {
             damageId: Result.id,
             InvestigationfileNo: values.PoliceInvestigationfileN,
             Diarynumber: values.PoliceDiarynumber,
             Department: values.PoliceDepartment,
             street: values.PoliceStreet,
-            pincode: values.Policepincode,
+            pincode: parseInt(values.Policepincode),
             city: values.Policecity,
           }
+
           await prisma.policeDetails.create({ data: Police });
         }
         if (values.parts === 'Yes') {

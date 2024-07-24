@@ -94,9 +94,11 @@ const RegisterDetails = catchAsync(async (req, res, next) => {
         return next(errcode);
       } else {
         const kundencodeDeatils = await prisma.kunden.findFirst({ where: { Kundencode: values.kundencode } });
+        console.log("🚀 ~ RegisterDetails ~ kundencodeDeatils:", kundencodeDeatils)
         const Benutzer = {
           KundeTenantItemId: kundencodeDeatils.TenantItemId
         }
+        console.log("🚀 ~ RegisterDetails ~ Benutzer:", Benutzer)
         const Fahrer = {
           KundeTenantItemId: kundencodeDeatils.TenantItemId,
           Nachname: values.VorundNachname,

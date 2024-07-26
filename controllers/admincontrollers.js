@@ -197,7 +197,7 @@ const VerifyEmail = catchAsync(async (req, res, next) => {
       }
 
     } else {
-      const errcode = new Error("Id required to Update Password.");
+      const errcode = new Error("code  required to verify Email.");
       errcode.statusCode = 201;
       return next(errcode);
     }

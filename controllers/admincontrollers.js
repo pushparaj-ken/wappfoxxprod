@@ -11,6 +11,7 @@ const LoginDetails = catchAsync(async (req, res, next) => {
     const values = req.body
     if (values.EMailAdresse != '' && values.EMailAdresse != null && values.EMailAdresse != undefined && values.Passwort != '' && values.Passwort != null && values.Passwort != undefined) {
       const AdministratorinDetails = await prisma.administratorin.findUnique({ where: { EMailAdresse: values.EMailAdresse } })
+      console.log("🚀 ~ LoginDetails ~ AdministratorinDetails:", AdministratorinDetails)
       if (AdministratorinDetails != null) {
         const id = AdministratorinDetails.Id;
         const token = Auth.getJWTToken(id, "Admin")
@@ -123,6 +124,7 @@ const DashboardDetails = catchAsync(async (req, res, next) => {
       return next(errcode);
     }
   } catch (error) {
+    console.log("🚀 ~ DashboardDetails ~ error:", error.stack)
     const errcode = new Error(error.stack);
     errcode.statusCode = 201;
     return next(errcode);
@@ -218,7 +220,7 @@ const DamageDetails = catchAsync(async (req, res, next) => {
       where.damageNo = values.damageNo
     }
     if (values.userId != null && values.userId != undefined && values.userId != '') {
-      where.userId = values.userId
+      where.userId = parseInt(values.userId)
     }
 
     query = { where, include: { parkinglocation: true, documents: true, policedetails: true, partydetails: true, damagevehicleparts: true } }

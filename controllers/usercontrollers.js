@@ -104,6 +104,7 @@ const RegisterDetails = catchAsync(async (req, res, next) => {
           Nachname: values.VorundNachname,
           Anrede: 1,
         }
+
         const UsersDetails = await prisma.benutzer.create({ data: Benutzer });
         await prisma.fahrer.create({ data: Fahrer }).then(async (FahrerDetails) => {
           const Adresse = {
@@ -113,6 +114,9 @@ const RegisterDetails = catchAsync(async (req, res, next) => {
             AdressTyp: '',
             AdressVerweis: 0
           }
+          if (values.Telefonnummer) {
+            Adresse.Telefonnummer = (values.Telefonnummer).toString()
+          }
           await prisma.adresse.create({ data: Adresse });
         })
         if (UsersDetails) {
@@ -121,6 +125,9 @@ const RegisterDetails = catchAsync(async (req, res, next) => {
             zugehorigesUnternehmen: (values.zugehorigesUnternehmen).slice(0, 10),
             EMailAdresse: values.EMailAdresse,
             UserId: UsersDetails.UserId
+          }
+          if (values.Telefonnummer) {
+            Benutzers.Telefonnummer = (values.Telefonnummer).toString()
           }
           const benutzersDetails = await prisma.benutzers.create({ data: Benutzers });
           const id = benutzersDetails.BenutzerId;

@@ -31,7 +31,7 @@ const LoginDetails = catchAsync(async (req, res, next) => {
               const id = BankverbindungenDetails.Benutzers.BenutzerId;
               const token = Auth.getJWTToken(id, "Users")
               res.set('Authentication', token);
-              const isPasswordMatched = bcrypt.compare(values.Passwort, BankverbindungenDetails.Benutzers.Passwort)
+              const isPasswordMatched = await bcrypt.compare(values.Passwort, BankverbindungenDetails.Benutzers.Passwort)
               if (!isPasswordMatched) {
                 const errcode = new Error("Password mismatch");
                 errcode.statusCode = 201;

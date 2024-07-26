@@ -786,16 +786,16 @@ model Fahrer {
   Fahrerklasse                                String?                 @db.NVarChar(Max)
   Kostenstelle1                               String?                 @db.NVarChar(Max)
   Kostenstelle2                               String?                 @db.NVarChar(Max)
-  Kostenstelle1G_ltigAb                       DateTime?               @map("Kostenstelle1GültigAb")
-  Kostenstelle2G_ltigAb                       DateTime?               @map("Kostenstelle2GültigAb")
+  Kostenstelle1G_ltigAb                       DateTime?               
+  Kostenstelle2G_ltigAb                       DateTime?               
   NutzerVon                                   DateTime?
   NutzerBis                                   DateTime?
-  DatumF_hrerschein                           DateTime?               @map("DatumFührerschein")
+  DatumF_hrerschein                           DateTime?              
   IstAktiv                                    Boolean?
   IstAktivGueltigAb                           DateTime?
   IstAktivGueltigBis                          DateTime?
   EntfernungWohnungZuArbeitsplatz             Int?
-  EntfernungWohnungZuArbeitsplatzG_ltigAb     DateTime?               @map("EntfernungWohnungZuArbeitsplatzGültigAb")
+  EntfernungWohnungZuArbeitsplatzG_ltigAb     DateTime?               
   Abteilung                                   String?                 @db.NVarChar(Max)
   Position                                    String?                 @db.NVarChar(Max)
   Vorgesetzter                                String?                 @db.NVarChar(Max)
@@ -803,8 +803,8 @@ model Fahrer {
   KontaktPersonalabteilung                    String?                 @db.NVarChar(Max)
   AkademischerGrad                            String?                 @db.NVarChar(Max)
   Personalnummer                              String?                 @db.NVarChar(Max)
-  LetzteUnfallverh_tungsvorschriftKontrolle   DateTime?               @map("LetzteUnfallverhütungsvorschriftKontrolle")
-  NaechsteUnfallverh_tungsvorschriftKontrolle DateTime?               @map("NaechsteUnfallverhütungsvorschriftKontrolle")
+  LetzteUnfallverh_tungsvorschriftKontrolle   DateTime?              
+  NaechsteUnfallverh_tungsvorschriftKontrolle DateTime?               
   LetzteFahrerunterweisung                    DateTime?
   NaechsteFahrerunterweisung                  DateTime?
   LetzteFuehrerscheinKontrolle                DateTime?
